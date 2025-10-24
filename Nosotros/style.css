@@ -1,0 +1,605 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --icon-color: #040F44;
+    --primary-color: #06196F;
+    --background-color: #f9f5f0;
+    --dark-color: #151515;
+}
+
+html {
+    font-size: 62.5%;
+    font-family: 'Poppins', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ********************************** */
+/*            REUTILIZABLES            */
+/* ********************************** */
+
+.btn-info {
+    min-width: 30px;
+    background-color: #051238;
+    color: #fff;
+    margin: 3rem 0;
+    padding: 0.8rem 1.5rem;
+    border-radius: 2rem;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-info:hover {
+    background-color: #0d6efd;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+/* ********************************** */
+/*             UTILIDADES             */
+/* ********************************** */
+.container {
+    max-width: 120rem;
+    margin: 0 auto;
+}
+
+.heading-1 {
+    text-align: center;
+    font-weight: 500;
+    font-size: 3rem;
+}
+
+/* ********************************** */
+/*               HEADER               */
+/* ********************************** */
+.container-hero {
+    background-color: var(--background-color);
+}
+
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 0;
+}
+
+.customer-support {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.customer-support i {
+    font-size: 3.3rem;
+    color: var(--icon-color);
+}
+
+.content-customer-support {
+    display: flex;
+    flex-direction: column;
+}
+
+.container-logo {
+    display: flex;
+    height: 5rem;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.container-logo img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+    height: 8rem;
+    overflow: hidden;
+    mix-blend-mode: multiply;
+    background-color: transparent;
+}
+
+.container-user {
+    display: flex;
+    gap: 1rem;
+    cursor: pointer;
+}
+
+.container-user .fa-user {
+    font-size: 3rem;
+    color: var(--icon-color);
+    padding-right: 2.5rem;
+    border-right: 1px solid #e2e2e2;
+}
+
+.container-user .fa-basket-shopping {
+    font-size: 3rem;
+    color: var(--icon-color);
+    padding-left: 1rem;
+}
+
+.content-shopping-cart {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ************* NAVBAR ************* */
+.container-navbar {
+    background-color: var(--primary-color);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+.navbar .fa-bars {
+    display: none;
+}
+
+.menu {
+    display: flex;
+    gap: 2rem;
+}
+
+.menu li {
+    list-style: none;
+}
+
+.menu a {
+    text-decoration: none;
+    font-size: 1.3rem;
+    color: #fff;
+    font-weight: 600;
+    text-transform: uppercase;
+    position: relative;
+}
+
+.menu a::after {
+    content: '';
+    width: 2rem;
+    height: 1px;
+    background-color: #fff;
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.menu a:hover::after {
+    opacity: 1;
+}
+
+.menu a:hover {
+    color: #fff;
+}
+
+.search-form {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    border: 2px solid #fff;
+    border-radius: 2rem;
+    background-color: #fff;
+    height: 4.4rem;
+    overflow: hidden;
+}
+
+.search-form input {
+    outline: none;
+    font-family: inherit;
+    border: none;
+    width: 25rem;
+    font-size: 1.4rem;
+    padding: 0 2rem;
+    color: #777;
+    cursor: pointer;
+}
+
+.search-form input::-webkit-search-cancel-button {
+    appearance: none;
+}
+
+.search-form .btn-search {
+    border: none;
+    background-color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 1rem;
+}
+
+.btn-search i {
+    font-size: 2rem;
+    color: #fff;
+}
+
+
+/* ********************************** */
+/*           BANNER NOSOTROS          */
+/* ********************************** */
+.banner {
+    background-image: linear-gradient(100deg, #000020, #00000020), url('../img/fondo.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 20rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.content-banner {
+    color: #fff;
+}
+
+.content-banner h2 {
+    text-align: initial;
+    font-size: 5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+/* ********************************** */
+/*        CONTENIDO NOSOTROS         */         
+/* ********************************** */
+
+.content {
+    /* 1. Usar Flexbox para colocar los hijos (text y images) uno al lado del otro */
+    display: flex;
+    margin: 20px 0;
+    /* 2. Invertir el orden: images (izquierda), text (derecha) */
+    flex-direction: row-reverse;
+    /* 3. Asegurar que ocupen el espacio disponible */
+    justify-content: space-between;
+    align-items: flex-start; /* Alinea los ítems en la parte superior */
+    padding: 2rem; /* Añade un poco de espacio alrededor */
+}
+
+.img-content {
+    /* Establece un contexto de posicionamiento para las imágenes internas */
+    position: relative;
+    /* Usa un aspecto de ancho/alto (ej: 1:1) para mantener el espacio */
+    aspect-ratio: 1 / 1; 
+    width: 100%;
+    margin-bottom: 3rem; /* Espacio para que la imagen font no se salga */
+}
+
+.imagen-grand,
+.imagen-font {
+    /* La posición absoluta permite que se superpongan */
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.imagen-grand img {
+    /* La imagen grande ocupa la mayor parte del espacio */
+    width: 80%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    border-radius: 10px;
+    z-index: 1;
+}
+
+.imagen-font {
+    /* Contenedor de la imagen pequeña que va abajo a la derecha */
+    width: 50%; /* Más chica */
+    height: 50%;
+    /* Posiciona al fondo a la derecha del .img-content */
+    bottom: 0;
+    right: 0;
+    z-index: 2; /* Asegura que esté encima de la grande */
+}
+
+.imagen-font img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 10px;
+    object-fit: cover;
+    /* Opcional: añade un borde o sombra para destacarla */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+
+.text {
+    /* El texto y acordeón ocupan un 55% del ancho */
+    flex: 0 0 55%;
+    padding-right: 2rem; /* Espacio entre el texto y las imágenes */
+}
+.text h2{
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    color: var(--dark-color);
+}
+.text p {
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    color: #333;
+    font-size: 1.6rem;
+}
+
+.images {
+    /* Las imágenes ocupan un 40% del ancho */
+    flex: 0 0 40%;
+}
+
+/* ********************************** */
+/*           ACORDEON NOSOTROS        */
+/* ********************************** */
+
+.acordeon {
+    width: 100%; /* Ocupa todo el ancho de su contenedor (.text) */
+    margin: 5rem 0 2rem 0;
+}
+
+/* Estilo para los botones (actúan como títulos) */
+.acordeon-btn {
+    width: 100%;
+    height: auto;
+    display: block;
+    background-color: var(--primary-color);
+    padding: 1rem;
+    text-align: left; /* Alinea el texto a la izquierda */
+    border: none; /* Elimina el borde por defecto del botón */
+    cursor: pointer; /* Indica que es un elemento clicable */
+    color: #fff;
+    border-bottom: .1px solid #fff;
+    border-radius: 5px;
+    font-weight: 400;
+    font-size: 2.6rem; /* Ajusta el tamaño de la fuente si es necesario */
+    transition: font-weight 0.3s ease;
+}
+
+.acordeon-btn:hover {
+    font-weight: 600;
+}
+
+/* Contenido del acordeón (los párrafos <p>) */
+.acordeon section p {
+    /* Oculto por defecto: max-height: 0 para transición suave */
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 1rem; /* Padding base para el estado cerrado */
+    /* Transición para un efecto de "deslizamiento" suave */
+    transition: max-height .4s ease-in-out, padding .4s ease-in-out; 
+}
+
+/* ESTADO ACTIVO: Se muestra cuando JavaScript añade la clase 'active' a la sección */
+.acordeon section.active p {
+    /* Usar un valor numérico GRANDE para permitir la transición */
+    max-height: 500px; 
+    /* Mostrar el padding */
+    padding: 1rem; 
+    overflow: visible;
+}
+
+.acordeon section p {
+    /* Oculto por defecto: max-height: 0 para transición suave */
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 1rem; /* Padding base para el estado cerrado */
+    /* Transición para un efecto de "deslizamiento" suave */
+    transition: max-height .4s ease-in-out, padding .4s ease-in-out; 
+}
+
+/* ESTADO HOVER: Se muestra cuando el cursor pasa sobre la sección */
+.acordeon section:hover p {
+    /* Usar un valor numérico GRANDE para permitir la transición */
+    max-height: 500px; 
+    /* Mostrar el padding */
+    padding: 1rem; 
+    /* Asegúrate de que el contenido no sea cortado */
+    overflow: visible; 
+}
+
+/* Opcional: Cambia el cursor del botón para que parezca solo informativo */
+.acordeon-btn {
+    /* ... otros estilos ... */
+    cursor: default; /* Cambia de 'pointer' (clic) a 'default' (hover) */
+}
+
+
+
+/************************************ */
+/*            LOCATION                  */     
+/* ********************************** */
+
+
+
+.location {
+    background-color: var(--icon-color);
+    margin: 20px 0 0 0;
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+iframe{
+    width: 100%;
+    height: 40rem;
+    border-radius: 10px;
+    margin: 20px 0 0 0;
+    margin-top: 20px;
+}
+
+.location h2 {
+    color: #fff;
+    font-size: 4rem;
+    margin-bottom: 2rem;
+}
+
+.location p {
+    color: #fff;
+    font-size: 1.6rem;
+    line-height: 1.6;
+}
+
+/* ********************************** */
+/*              FOOTER                */
+/* ********************************** */
+.footer {
+	/* Color base del fondo y la imagen de los árboles */
+	background-color: var(--primary-color);
+	color: #fff;
+	padding: 50px 20px 20px;
+	font-size: 0.95rem;
+}
+
+/* Contenedor principal para limitar el ancho y centrar */
+.footer-contenedor {
+	max-width: 1200px;
+	margin: 0 auto;
+	display: flex;
+	flex-wrap: wrap;
+	/* Permite que los bloques bajen si no caben */
+	gap: 40px;
+	padding-bottom: 20px;
+}
+
+/* Columna Principal (Logo y Descripción) */
+.footer-col-info {
+	flex: 1 1 300px;
+	/* Ocupa al menos 300px y se expande */
+	max-width: 350px;
+}
+
+.footer-logo {
+	display: block;
+	margin: 0 auto 20px;
+	/* Centra horizontalmente */
+	width: 150px;
+	height: auto;
+	border-radius: 6px;
+	filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3));
+	background-color: transparent;
+}
+
+.footer-descripcion {
+	color: var(--color-texto-secundario);
+	line-height: 1.7;
+}
+
+/* Estilo general para los títulos de columna */
+.footer-titulo {
+	font-size: 1.1rem;
+	font-weight: 700;
+	color: var(--color-texto-principal);
+	margin-bottom: 20px;
+	text-transform: uppercase;
+}
+
+/* Columnas de Navegación y Experiencias */
+.footer-col-nav,
+.footer-col-exp {
+	flex: 1 1 150px;
+	/* Ancho flexible para adaptarse */
+}
+
+.footer-nav ul {
+	list-style: none;
+}
+
+.footer-nav a {
+	color: var(--color-texto-secundario);
+	text-decoration: none;
+	display: block;
+	padding: 5px 0;
+	transition: color 0.3s ease;
+}
+
+.footer-nav a:hover {
+	color: #fff;
+}
+
+.footer-nav li:hover {
+	text-decoration: underline;
+}
+
+/* Columna de Contacto */
+.footer-col-contacto {
+	flex: 1 1 300px;
+	/* Ancho dedicado para el contacto */
+	max-width: 350px;
+}
+
+.contacto-item {
+	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
+	color: var(--color-texto-secundario);
+}
+
+.contacto-item i {
+	/* Iconos de Font Awesome o similar se simulan aquí */
+	font-style: normal;
+	margin-right: 10px;
+	font-size: 2.1rem;
+	color: var(--color-texto-principal);
+	/* Color del ícono */
+	min-width: 20px;
+	/* Asegura que el texto se alinee */
+	text-align: center;
+}
+
+.social-icons a {
+	color: #fff;
+	font-size: 2.4rem;
+	margin-right: 15px;
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+
+.social-icons {
+	margin-top: 20px;
+}
+
+
+
+/* ---------------------------------- */
+/* Copyright Bar */
+/* ---------------------------------- */
+.footer-copyright {
+	max-width: 1200px;
+	margin: 0 auto;
+	text-align: center;
+	padding-top: 20px;
+	border-top: 1px solid rgba(255, 255, 255, 0.1);
+	color: var(--color-copyright);
+	font-size: 0.85rem;
+}
+
+.footer-copyright a {
+	color: var(--color-copyright);
+	text-decoration: none;
+}
+
+.footer-copyright a:hover {
+	text-decoration: underline;
+}
+
+/* Media Query para móvil */
+@media (max-width: 768px) {
+	.footer-contenedor {
+		flex-direction: column;
+		gap: 30px;
+	}
+
+	.footer-col-info,
+	.footer-col-nav,
+	.footer-col-exp,
+	.footer-col-contacto {
+		max-width: 100%;
+	}
+}

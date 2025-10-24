@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STANLEY - Login</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="img/forlogin - copia.png">
+</head>
+<body>
+    <div class="formulario">
+        <img src="img/forlogin.png" alt="Logo" class="logo">
+        <h1>Inicio de sesión</h1>
+        <form id="loginForm">
+            <div class="username">
+                <input type="text" id="username" name="username" required>
+                <label>Nombre de Usuario</label>
+            </div>
+            <div class="username">
+                <input type="password" id="password" name="password" required>
+                <label>Contraseña</label>
+            </div>
+            <div class="recordar">¿Olvidó su contraseña?</div>
+            <input type="submit" value="Iniciar sesión">
+            <div class="registrarse">
+                ¿No tienes una cuenta? <a href="../Creacion de cuenta/index.html">Regístrate</a> <br>
+                <a href="../index.html">Página Principal</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("loginForm");
+
+        form.addEventListener("submit", async e => {
+            e.preventDefault();
+
+            // Capturamos los valores correctamente
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
+
+            if (!username || !password) {
+                alert("Por favor completa todos los campos.");
+                return;
+            }
+
+            try {
+                const response = await fetch("http://localhost:3000/verify", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password }) // 👈 coincide con server.js
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(result.message); // Inicio de sesión exitoso
+                    form.reset();
+                    setTimeout(() => {
+                        window.location.href = "../index.html";
+                    }, 1000);
+                } else {
+                    alert(result.error || "❌ Usuario o contraseña incorrectos");
+                }
+            } catch (error) {
+                console.error("Error al conectar con el servidor:", error);
+                alert("❌ No se pudo conectar con el servidor");
+            }
+        });
+    });
+    </script>
+</body>
+</html>

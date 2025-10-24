@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STANLEY</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="IMG/forlogin - copia.png">
+</head>
+<body>
+    <div class="form-register">
+        <!-- Logo -->
+        <div class="logo-container">
+        <img src="../img/forlogin.png" alt="Logo" class="logo">
+        </div>
+
+        <!-- Título -->
+        <h4>Crear Cuenta</h4>
+
+        <!-- Formulario -->
+        <form id="loginForm">
+            <input class="controls" type="text" name="nombre" id="nombre" placeholder="Ingrese su Nombre Completo" required 
+                oninvalid="this.setCustomValidity('Completa este campo')" 
+                oninput="this.setCustomValidity('')">
+
+            <input class="controls" type="text" name="usuario" id="usuario" placeholder="Ingrese su Usuario" required 
+                oninvalid="this.setCustomValidity('Completa este campo')" 
+                oninput="this.setCustomValidity('')">
+
+            <input class="controls" type="email" name="correo" id="correo" placeholder="Ingrese su Correo" required 
+                oninvalid="this.setCustomValidity('Completa este campo')" 
+                oninput="this.setCustomValidity('')">
+
+            <input class="controls" type="password" name="password" id="password" placeholder="Ingrese su Contraseña" required 
+                oninvalid="this.setCustomValidity('Completa este campo')" 
+                oninput="this.setCustomValidity('')">
+
+            <label class="checkbox-container">
+                <input type="checkbox" id="terms" required 
+                    oninvalid="this.setCustomValidity('Debes aceptar los términos y condiciones')" 
+                    oninput="this.setCustomValidity('')">
+                Estoy de acuerdo con los Términos y Condiciones
+            </label>
+
+            <input class="botons" type="submit" value="Registrar">
+        </form>
+
+        <p><a href="../Inicio de Sesion/index.html">Ya tengo una Cuenta</a></p>
+    </div>
+    <!-- script para enlace a BD -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("loginForm");
+
+    form.addEventListener("submit", async e => {
+        e.preventDefault();
+
+        // 1️⃣ Tomamos los datos del formulario
+        const nombre = document.getElementById("nombre").value;
+        const usuario = document.getElementById("usuario").value;
+        const correo = document.getElementById("correo").value;
+        const password = document.getElementById("password").value;
+
+        // 2️⃣ Enviamos los datos al servidor Node.js
+        try {
+            const response = await fetch("http://localhost:3000/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ nombre, usuario, correo, password })
+            });
+
+            const result = await response.json();
+            console.log("Respuesta del servidor:", result);
+
+            // 3️⃣ Mostramos mensaje según la respuesta
+            if (result.message) {
+                alert(result.message);
+                form.reset();
+
+                // Redirección opcional
+                setTimeout(() => {
+                    window.location.href = "../index.html";
+                }, 1000);
+            } else if (result.error) {
+                alert("❌ Error: " + result.error);
+            }
+        } catch (error) {
+            console.error("Error al conectar con el servidor:", error);
+            alert("❌ No se pudo conectar con el servidor");
+        }
+    });
+});
+</script>
+<!-- prueba 1  -->
+
+</body>
+</html>
+

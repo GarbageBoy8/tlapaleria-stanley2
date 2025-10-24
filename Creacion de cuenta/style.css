@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+html {
+  font-size: 62.5%;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background: linear-gradient( 150deg,#040F44, #02166c, #0905f0, #0939e3);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center; /* centrado horizontal */
+  align-items: center;  
+}
+
+
+
+.form-register {
+  position: relative;  
+  width: 400px;
+  background: #fcfbfb;
+  padding: 30px;
+  margin: auto;
+  border-radius: 4px;
+  color: white;
+  box-shadow: 7px 13px 37px #000;
+}
+
+.logo-container {
+  text-align: center;
+}
+
+.logo-container img {
+  position: absolute; 
+  top: -80px;           
+  left: 50%;            
+  transform: translateX(-50%); 
+  width: 110px;         
+  height: auto;
+  z-index: 10;          
+}
+
+.form-register h4 {
+  color: #000;
+  font-size: 22px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+
+.controls {
+  width: 100%;
+  background: transparent;  
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  border: 1px solid #1f53c5;
+  font-size: 16px;
+  color: rgb(7, 7, 7); 
+  transition: all 0.2s ease; 
+}
+
+.controls::placeholder {
+  color: #999;
+}
+
+.controls:focus {
+  border-color: #244baf;
+  background-color: rgba(36, 75, 175, 0.1);
+  outline: none;
+  box-shadow: 0 4px 8px rgba(36, 75, 175, 0.3);
+  transform: scale(1.02);
+}
+
+
+.form-register p {
+  height: 40px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 40px;
+}
+
+
+.form-register a {
+  color: white;
+  text-decoration: none;
+}
+
+.form-register a:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+
+.form-register p:last-of-type a {
+  color: #1f53c5; 
+}
+
+.form-register p:last-of-type a:hover {
+  text-decoration: underline;
+  color: #244baf;
+}
+
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  cursor: pointer;
+  font-size: 14px;
+  user-select: none;
+  margin: 15px 0;
+  text-align: center;
+  color: black;
+}
+
+
+.botons {
+  width: 100%;
+  background: transparent; 
+  border: 2px solid #06196F; 
+  color: #06196F; 
+  padding: 12px;
+  margin: 16px 0;
+  font-size: 13px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.botons:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 8px 20px rgba(6, 25, 111, 0.5);
+  background: #06196F; 
+  color: white; 
+  border-color: #06196F;
+}
