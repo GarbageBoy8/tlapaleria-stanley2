@@ -52,7 +52,7 @@
 			</nav>
 		</div>
 	</header>
-<!-- pull -->
+
 	<!-- BANNER -->
 	<section class="banner">
 		<div class="content-banner">
@@ -94,16 +94,101 @@
 
 					<textarea name="mensaje" rows="6" placeholder="Mensaje"></textarea>
 
-					<div class="form-footer">
-						<div class="recaptcha-box">
-							<input type="checkbox" id="robot" name="robot">
-							<label for="robot">No soy un robot</label>
-							<div class="recaptcha-widget">reCAPTCHA</div>
-						</div>
-
-						<button type="submit" class="btn-submit">Enviar</button>
-					</div>
 	</section>
+
+	<button type="button" class="btn-info" onclick="genPDF()">Descargar cita</button>
+
+	<!-- script para generar pdf -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	<script type="text/javascript">
+	// --- Generador de folio ---
+	function generarFolio() {
+		const fecha = new Date();
+		const año = fecha.getFullYear().toString().slice(-2);
+		const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+		const dia = String(fecha.getDate()).padStart(2, '0');
+		const random = Math.random().toString(36).substring(2, 6).toUpperCase();
+		return `CIT-${año}${mes}${dia}-${random}`;
+	}
+
+	async function genPDF() {
+		const { jsPDF } = window.jspdf;
+		const doc = new jsPDF();
+
+		// --- Logo (ajusta la ruta a tu imagen) ---
+		// Puede ser JPG o PNG, de preferencia 200x200px o menos
+		const logoUrl = "./img/LogoS.jpg"; // 🔁 cambia por tu logo
+		const img = await loadImageAsBase64(logoUrl);
+		doc.addImage(img, "PNG", 150, 10, 40, 30); // (imgData, formato, x, y, ancho, alto)
+
+		// --- Folio ---
+		const folio = generarFolio();
+
+		// --- Encabezado ---
+		doc.setFontSize(18);
+		doc.setFont("helvetica", "bold");
+		doc.text("Cita de Reparación", 20, 25);
+		doc.setFontSize(12);
+		doc.setTextColor(0, 0, 0);
+		doc.text("Folio: " + folio, 20, 40);
+
+		// --- Datos del formulario ---
+		let y = 60; // posición vertical inicial
+		const datos = [
+			{ label: "Nombre:", value: document.querySelector('input[name="nombre"]').value },
+			{ label: "Teléfono:", value: document.querySelector('input[name="telefono"]').value },
+			{ label: "Correo Electrónico:", value: document.querySelector('input[name="correo"]').value },
+			{ label: "Asunto:", value: document.querySelector('input[name="asunto"]').value },
+			{ label: "Fecha de Cita:", value: document.querySelector('input[name="fecha-cita"]').value },
+			{ label: "Hora de Cita:", value: document.querySelector('input[name="hora-cita"]').value },
+			{ label: "Mensaje:", value: document.querySelector('textarea[name="mensaje"]').value }
+		];
+
+		doc.setFont("helvetica", "normal");
+		doc.setDrawColor(0, 102, 204); // Azul (RGB)
+		doc.setLineWidth(0.6);
+
+		datos.forEach(item => {
+			// Texto
+			doc.setTextColor(0, 0, 0);
+			doc.text(`${item.label} ${item.value}`, 20, y);
+
+			// Línea azul debajo del texto
+			const textWidth = doc.getTextWidth(`${item.label} ${item.value}`);
+			doc.line(20, y + 2, 20 + textWidth, y + 2); // x1, y1, x2, y2
+
+			y += 15; // separador entre campos
+		});
+
+		// --- Pie de página ---
+		const fechaActual = new Date().toLocaleString('es-MX');
+		doc.setFontSize(10);
+		doc.setTextColor(100);
+		doc.text(`Generado el: ${fechaActual}`, 20, 280);
+
+		// --- Guardar PDF ---
+		doc.save(`cita-reparacion.pdf`);
+	}
+
+	// --- Convertir imagen URL a base64 para jsPDF ---
+	function loadImageAsBase64(url) {
+		return new Promise((resolve, reject) => {
+			const xhr = new XMLHttpRequest();
+			xhr.onload = function() {
+				const reader = new FileReader();
+				reader.onloadend = () => resolve(reader.result);
+				reader.readAsDataURL(xhr.response);
+			};
+			xhr.onerror = reject;
+			xhr.open("GET", url);
+			xhr.responseType = "blob";
+			xhr.send();
+		});
+	}
+</script>
+
+
+
 
 	<!-- location -->
 	<section class="location">
@@ -125,7 +210,8 @@
 			<div class="footer-col-info">
 				<img class="footer-logo" src="/img/forlogin.png" />
 				<p class="footer-descripcion">
-					En STANLEY creemos que la importancia de ofrecer nuestro productos con nuestra alta calidad y aun precio accesible es la mejor opcion.
+					En Parque Ecoturístico Tlalmanalco, creemos que la diversión y el
+					respeto por la naturaleza pueden ir de la mano.
 				</p>
 			</div>
 
@@ -184,7 +270,7 @@
 
 		<div class="footer-copyright">
 			&copy; 2025 Tlapaleria Stanley. Desarrollado por
-			<a href="#">Cadena, Carrillo, Gutierrez, Pareja y Sanchez</a> | <a href="#">Política de privacidad</a>.
+			<a href="#">CHUPPS</a> | <a href="#">Política de privacidad</a>.
 		</div>
 	</footer>
 

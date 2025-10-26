@@ -37,6 +37,26 @@ html {
 	font-size: 3rem;
 }
 
+.btn-info {
+	min-width: 30px;
+	background-color: #051238;
+	color: #fff;
+	margin: 3rem 3.5rem;
+	padding: 0.8rem 1.5rem;
+	border-radius: 2rem;
+	text-decoration: none;
+	font-weight: 600;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	transition: all 0.3s ease;
+}
+
+.btn-info:hover {
+	background-color: #0d6efd;
+	color: #fff;
+	transform: scale(1.05);
+}
 
 
 /* ********************************** */
