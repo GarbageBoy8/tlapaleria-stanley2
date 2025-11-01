@@ -744,8 +744,10 @@ html {
 	/* Ligeramente más opaca */
 	z-index: 1;
 	/* Simula el color más oscuro de la imagen de fondo */
-	background-color: var(--primary-color);
 	min-height: 400px;
+}
+.imagen-fondo img{
+	border-radius: 10px;
 }
 
 .imagen-frente {
