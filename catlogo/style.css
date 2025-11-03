@@ -211,7 +211,7 @@ html {
 /*           BANNER CONTACTO          */
 /* ********************************** */
 .banner {
-    background-image: linear-gradient(100deg, #000020, #00000020), url('../img/fondo.jpg');
+    background-image: linear-gradient(100deg, #000020, #00000020), url('../img/fondo.webp');
     background-size: cover;
     background-position: center;
     height: 20rem;
