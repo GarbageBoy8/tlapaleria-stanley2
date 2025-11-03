@@ -51,7 +51,7 @@
 .producto-en-carrito {
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
+    margin: 15px;
     border-bottom: 1px solid #eee;
     padding-bottom: 10px;
 }
