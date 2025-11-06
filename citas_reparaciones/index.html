@@ -63,23 +63,21 @@
 
 	<section class="date-page">
 		<div class="date-container">
-
 			<div class="form-section">
 				<span class="etiqueta">Agenda tu cita</span>
 				<h2>¿Cómo podemos ayudarte?</h2>
-				<form action="#" method="POST">
 
+				<form id="form-cita" onsubmit="event.preventDefault(); validarYGenerarPDF();">
 					<div class="form-row">
-						<input type="text" name="nombre" placeholder="Nombre" required>
-						<input type="tel" name="telefono" placeholder="Teléfono">
+						<input type="text" id="nombre" name="nombre" placeholder="Nombre" required>
+						<input type="tel" id="telefono" name="telefono" placeholder="Teléfono" required>
 					</div>
 
 					<div class="form-row">
-						<input type="email" name="correo" placeholder="Correo electrónico" required>
-						<input type="text" name="asunto" placeholder="Asunto">
+						<input type="email" id="correo" name="correo" placeholder="Correo electrónico" required>
+						<input type="text" id="asunto" name="asunto" placeholder="Asunto" required>
 					</div>
 
-					<!-- NUEVA SECCIÓN DE FECHA Y HORA DE CITA -->
 					<div class="form-row">
 						<div class="form-group">
 							<label for="fecha-cita" class="fecha-label">Selecciona la fecha de tu cita:</label>
@@ -92,100 +90,111 @@
 						</div>
 					</div>
 
-					<textarea name="mensaje" rows="6" placeholder="Mensaje"></textarea>
+					<textarea name="mensaje" rows="6" placeholder="Mensaje" required></textarea>
 
+					<button type="submit" class="btn-info">Descargar cita en PDF</button>
+				</form>
+			</div>
+		</div>
 	</section>
 
-	<button type="button" class="btn-info" onclick="genPDF()">Descargar cita</button>
 
 	<!-- script para generar pdf -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-	<script type="text/javascript">
-	// --- Generador de folio ---
-	function generarFolio() {
-		const fecha = new Date();
-		const año = fecha.getFullYear().toString().slice(-2);
-		const mes = String(fecha.getMonth() + 1).padStart(2, '0');
-		const dia = String(fecha.getDate()).padStart(2, '0');
-		const random = Math.random().toString(36).substring(2, 6).toUpperCase();
-		return `CIT-${año}${mes}${dia}-${random}`;
-	}
-
-	async function genPDF() {
-		const { jsPDF } = window.jspdf;
-		const doc = new jsPDF();
-
-		// --- Logo (ajusta la ruta a tu imagen) ---
-		// Puede ser JPG o PNG, de preferencia 200x200px o menos
-		const logoUrl = "./img/LogoS.jpg"; // 🔁 cambia por tu logo
-		const img = await loadImageAsBase64(logoUrl);
-		doc.addImage(img, "PNG", 150, 10, 40, 30); // (imgData, formato, x, y, ancho, alto)
-
-		// --- Folio ---
-		const folio = generarFolio();
-
-		// --- Encabezado ---
-		doc.setFontSize(18);
-		doc.setFont("helvetica", "bold");
-		doc.text("Cita de Reparación", 20, 25);
-		doc.setFontSize(12);
-		doc.setTextColor(0, 0, 0);
-		doc.text("Folio: " + folio, 20, 40);
-
-		// --- Datos del formulario ---
-		let y = 60; // posición vertical inicial
-		const datos = [
-			{ label: "Nombre:", value: document.querySelector('input[name="nombre"]').value },
-			{ label: "Teléfono:", value: document.querySelector('input[name="telefono"]').value },
-			{ label: "Correo Electrónico:", value: document.querySelector('input[name="correo"]').value },
-			{ label: "Asunto:", value: document.querySelector('input[name="asunto"]').value },
-			{ label: "Fecha de Cita:", value: document.querySelector('input[name="fecha-cita"]').value },
-			{ label: "Hora de Cita:", value: document.querySelector('input[name="hora-cita"]').value },
-			{ label: "Mensaje:", value: document.querySelector('textarea[name="mensaje"]').value }
-		];
-
-		doc.setFont("helvetica", "normal");
-		doc.setDrawColor(0, 102, 204); // Azul (RGB)
-		doc.setLineWidth(0.6);
-
-		datos.forEach(item => {
-			// Texto
-			doc.setTextColor(0, 0, 0);
-			doc.text(`${item.label} ${item.value}`, 20, y);
-
-			// Línea azul debajo del texto
-			const textWidth = doc.getTextWidth(`${item.label} ${item.value}`);
-			doc.line(20, y + 2, 20 + textWidth, y + 2); // x1, y1, x2, y2
-
-			y += 15; // separador entre campos
+	<script>
+		// --- Limitar caracteres permitidos en tiempo real ---
+		document.getElementById("nombre").addEventListener("input", function () {
+			this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, ""); // solo letras y espacios
 		});
 
-		// --- Pie de página ---
-		const fechaActual = new Date().toLocaleString('es-MX');
-		doc.setFontSize(10);
-		doc.setTextColor(100);
-		doc.text(`Generado el: ${fechaActual}`, 20, 280);
-
-		// --- Guardar PDF ---
-		doc.save(`cita-reparacion.pdf`);
-	}
-
-	// --- Convertir imagen URL a base64 para jsPDF ---
-	function loadImageAsBase64(url) {
-		return new Promise((resolve, reject) => {
-			const xhr = new XMLHttpRequest();
-			xhr.onload = function() {
-				const reader = new FileReader();
-				reader.onloadend = () => resolve(reader.result);
-				reader.readAsDataURL(xhr.response);
-			};
-			xhr.onerror = reject;
-			xhr.open("GET", url);
-			xhr.responseType = "blob";
-			xhr.send();
+		document.getElementById("telefono").addEventListener("input", function () {
+			this.value = this.value.replace(/[^0-9]/g, ""); // solo números
 		});
-	}
-</script>
+
+		// --- Generador de folio ---
+		function generarFolio() {
+			const f = new Date();
+			const random = Math.random().toString(36).substring(2, 6).toUpperCase();
+			return `CIT-${f.getFullYear().toString().slice(-2)}${String(f.getMonth() + 1).padStart(2, '0')}${String(f.getDate()).padStart(2, '0')}-${random}`;
+		}
+
+		// --- Validar antes de generar PDF ---
+		function validarYGenerarPDF() {
+			const nombre = document.getElementById("nombre").value.trim();
+			const telefono = document.getElementById("telefono").value.trim();
+			const correo = document.getElementById("correo").value.trim();
+			const asunto = document.getElementById("asunto").value.trim();
+			const fecha = document.getElementById("fecha-cita").value.trim();
+			const hora = document.getElementById("hora-cita").value.trim();
+			const mensaje = document.querySelector('textarea[name="mensaje"]').value.trim();
+
+			if (nombre === "" || telefono === "" || correo === "" || asunto === "" || fecha === "" || hora === "" || mensaje === "") {
+				alert("⚠️ Por favor completa todos los campos.");
+				return;
+			}
+
+			if (telefono.length < 7 || telefono.length > 15) {
+				alert("❌ El teléfono debe tener entre 7 y 15 dígitos.");
+				return;
+			}
+
+			genPDF();
+		}
+
+		// --- Generar PDF ---
+		async function genPDF() {
+			const { jsPDF } = window.jspdf;
+			const doc = new jsPDF();
+
+			const logoUrl = "./img/LogoS.jpg";
+			const img = await loadImageAsBase64(logoUrl);
+			doc.addImage(img, "PNG", 150, 10, 40, 30);
+
+			const folio = generarFolio();
+			doc.setFontSize(18);
+			doc.text("Cita de Reparación", 20, 25);
+			doc.setFontSize(12);
+			doc.text("Folio: " + folio, 20, 40);
+
+			let y = 60;
+			const datos = [
+				{ label: "Nombre:", value: document.getElementById("nombre").value },
+				{ label: "Teléfono:", value: document.getElementById("telefono").value },
+				{ label: "Correo Electrónico:", value: document.getElementById("correo").value },
+				{ label: "Asunto:", value: document.getElementById("asunto").value },
+				{ label: "Fecha de Cita:", value: document.getElementById("fecha-cita").value },
+				{ label: "Hora de Cita:", value: document.getElementById("hora-cita").value },
+				{ label: "Mensaje:", value: document.querySelector('textarea[name="mensaje"]').value }
+			];
+
+			datos.forEach(item => {
+				doc.text(`${item.label} ${item.value}`, 20, y);
+				y += 15;
+			});
+
+			const fechaActual = new Date().toLocaleString('es-MX');
+			doc.setFontSize(10);
+			doc.text(`Generado el: ${fechaActual}`, 20, 280);
+
+			doc.save(`cita-reparacion.pdf`);
+		}
+
+		// --- Convertir imagen URL a base64 ---
+		function loadImageAsBase64(url) {
+			return new Promise((resolve, reject) => {
+				const xhr = new XMLHttpRequest();
+				xhr.onload = () => {
+					const reader = new FileReader();
+					reader.onloadend = () => resolve(reader.result);
+					reader.readAsDataURL(xhr.response);
+				};
+				xhr.onerror = reject;
+				xhr.open("GET", url);
+				xhr.responseType = "blob";
+				xhr.send();
+			});
+		}
+	</script>
 
 
 
