@@ -96,6 +96,11 @@ app.get('/', (req, res) => {
   res.send('Servidor backend conectado a Clever Cloud 🚀');
 });
 
+app.get("/api/test", (req, res) => {
+  res.json({ message: "✅ El backend está funcionando correctamente" });
+});
+
+
 // 🚀 Inicializar servidor
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
