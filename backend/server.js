@@ -11,22 +11,24 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 🔌 Conexión con MySQL en Clever Cloud (usa las variables del .env)
-const db = mysql.createConnection({
+// 🔌 Crear pool de conexiones MySQL (mejor que una conexión única)
+const db = mysql.createPool({
   host: process.env.DB_HOST,         // Host de Clever Cloud
   user: process.env.DB_USER,         // Usuario
   password: process.env.DB_PASSWORD, // Contraseña
   database: process.env.DB_NAME,     // Nombre de la base de datos
-  port: process.env.DB_PORT || 3306  // Puerto (por defecto 3306)
+  port: process.env.DB_PORT || 3306, // Puerto
+  connectionLimit: 10                // Máximo de conexiones simultáneas
 });
 
-// 🚀 Verificar conexión
-db.connect(err => {
+// 🚀 Probar la conexión inicial al iniciar el servidor
+db.getConnection((err, connection) => {
   if (err) {
     console.error('❌ Error al conectar con MySQL:', err);
-    return;
+  } else {
+    console.log('✅ Conexión establecida correctamente con MySQL en Clever Cloud');
+    connection.release();
   }
-  console.log('✅ Conectado exitosamente a MySQL en Clever Cloud');
 });
 
 // 📥 Ruta para registrar usuarios
@@ -68,7 +70,7 @@ app.post("/register", (req, res) => {
 app.post('/verify', (req, res) => {
   console.log("📥 Intento de inicio de sesión:", req.body);
 
-  const { usuario, password } = req.body; // ← corregido: 'usuario' en lugar de 'username'
+  const { usuario, password } = req.body; // ← 'usuario' debe coincidir con el frontend
 
   if (!usuario || !password) {
     return res.status(400).json({ error: 'Faltan datos' });
@@ -96,10 +98,10 @@ app.get('/', (req, res) => {
   res.send('Servidor backend conectado a Clever Cloud 🚀');
 });
 
+// 🔍 Ruta de prueba API
 app.get("/api/test", (req, res) => {
   res.json({ message: "✅ El backend está funcionando correctamente" });
 });
-
 
 // 🚀 Inicializar servidor
 const PORT = process.env.PORT || 10000;
