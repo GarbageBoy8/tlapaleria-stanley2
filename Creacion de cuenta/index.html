@@ -55,15 +55,19 @@ document.addEventListener("DOMContentLoaded", function () {
     form.addEventListener("submit", async e => {
         e.preventDefault();
 
-        // 1️⃣ Tomamos los datos del formulario
-        const nombre = document.getElementById("nombre").value;
-        const usuario = document.getElementById("usuario").value;
-        const correo = document.getElementById("correo").value;
-        const password = document.getElementById("password").value;
+        const nombre = document.getElementById("nombre").value.trim();
+        const usuario = document.getElementById("usuario").value.trim();
+        const correo = document.getElementById("correo").value.trim();
+        const password = document.getElementById("password").value.trim();
 
-        // 2️⃣ Enviamos los datos al servidor Node.js
+        if (!nombre || !usuario || !correo || !password) {
+            alert("⚠️ Por favor completa todos los campos.");
+            return;
+        }
+
         try {
-            const response = await fetch("http://localhost:3000/register", {
+            // 🚀 Ahora usamos la URL del backend en Render
+            const response = await fetch("https://tlapaleria-backend.onrender.com/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -74,26 +78,24 @@ document.addEventListener("DOMContentLoaded", function () {
             const result = await response.json();
             console.log("Respuesta del servidor:", result);
 
-            // 3️⃣ Mostramos mensaje según la respuesta
-            if (result.message) {
-                alert(result.message);
+            if (response.ok && result.message) {
+                alert("✅ Cuenta creada correctamente");
                 form.reset();
-
-                // Redirección opcional
                 setTimeout(() => {
-                    window.location.href = "../index.html";
+                    window.location.href = "../Inicio de Sesion/index.html";
                 }, 1000);
-            } else if (result.error) {
-                alert("❌ Error: " + result.error);
+            } else {
+                alert("❌ " + (result.error || "Error al crear la cuenta"));
             }
+
         } catch (error) {
             console.error("Error al conectar con el servidor:", error);
-            alert("❌ No se pudo conectar con el servidor");
+            alert("❌ No se pudo conectar con el servidor. Verifica tu conexión.");
         }
     });
 });
 </script>
-<!-- prueba 1  -->
+
 
 </body>
 </html>
