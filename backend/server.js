@@ -8,7 +8,17 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-app.use(cors());
+
+// ✅ Configuración de CORS para permitir tu frontend de Vercel
+app.use(cors({
+  origin: [
+    'https://tlapaleria-stanley2.vercel.app', // dominio desplegado en Vercel
+    'http://localhost:3000' // opcional: para pruebas locales
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
+
 app.use(express.json());
 
 // 🔌 Crear pool de conexiones MySQL (mejor que una conexión única)
@@ -70,7 +80,7 @@ app.post("/register", (req, res) => {
 app.post('/verify', (req, res) => {
   console.log("📥 Intento de inicio de sesión:", req.body);
 
-  const { usuario, password } = req.body; // ← 'usuario' debe coincidir con el frontend
+  const { usuario, password } = req.body;
 
   if (!usuario || !password) {
     return res.status(400).json({ error: 'Faltan datos' });
