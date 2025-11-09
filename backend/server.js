@@ -102,7 +102,7 @@ app.post('/verify', (req, res) => {
     }
   });
 });
-
+//comentario prueba
 // 🌐 Ruta raíz para verificar el estado del servidor
 app.get('/', (req, res) => {
   res.send('Servidor backend conectado a Clever Cloud 🚀');
