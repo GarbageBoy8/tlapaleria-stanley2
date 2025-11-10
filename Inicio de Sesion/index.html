@@ -1,78 +1,87 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STANLEY - Login</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="img/forlogin - copia.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STANLEY - Registro</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="img/forlogin - copia.png">
 </head>
 <body>
-    <div class="formulario">
-        <img src="img/forlogin.png" alt="Logo" class="logo">
-        <h1>Inicio de sesión</h1>
+  <div class="formulario">
+    <img src="img/forlogin.png" alt="Logo" class="logo">
+    <h1>Crear cuenta</h1>
 
-        <form id="loginForm">
-            <div class="username">
-                <input type="text" id="usuario" name="usuario" required>
-                <label>Nombre de Usuario</label>
-            </div>
-            <div class="username">
-                <input type="password" id="password" name="password" required>
-                <label>Contraseña</label>
-            </div>
+    <form id="registerForm">
+      <div class="username">
+        <input type="text" id="nombre" name="nombre" required>
+        <label>Nombre completo</label>
+      </div>
+      <div class="username">
+        <input type="text" id="usuario" name="usuario" required>
+        <label>Nombre de usuario</label>
+      </div>
+      <div class="username">
+        <input type="email" id="correo" name="correo" required>
+        <label>Correo electrónico</label>
+      </div>
+      <div class="username">
+        <input type="password" id="password" name="password" required>
+        <label>Contraseña</label>
+      </div>
 
-            <input type="submit" value="Iniciar sesión">
-            <div class="registrarse">
-                ¿No tienes una cuenta? <a href="../Creacion de cuenta/index.html">Regístrate</a> <br>
-                <a href="../index.html">Página Principal</a>
-            </div>
-        </form>
-    </div>
+      <input type="submit" value="Registrarse">
+      <div class="registrarse">
+        ¿Ya tienes una cuenta? <a href="../Login/index.html">Inicia sesión</a>
+      </div>
+    </form>
+  </div>
 
-    <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const form = document.getElementById("loginForm");
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("registerForm");
 
-        form.addEventListener("submit", async e => {
-            e.preventDefault();
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
 
-            // Tomamos los datos del formulario
-            const usuario = document.getElementById("usuario").value.trim();
-            const password = document.getElementById("password").value.trim();
+      const nombre = document.getElementById("nombre").value.trim();
+      const usuario = document.getElementById("usuario").value.trim();
+      const correo = document.getElementById("correo").value.trim();
+      const password = document.getElementById("password").value.trim();
 
-            if (!usuario || !password) {
-                alert("Por favor completa todos los campos.");
-                return;
-            }
+      if (!nombre || !usuario || !correo || !password) {
+        alert("Por favor completa todos los campos.");
+        return;
+      }
 
-            try {
-                // 🌍 Backend en Render
-                const response = await fetch("https://tlapaleria-backend.onrender.com/verify", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ usuario, password })
-                });
-
-                const result = await response.json();
-
-                if (response.ok) {
-                    alert(result.message || "✅ Inicio de sesión exitoso");
-                    form.reset();
-
-                    // Redirección tras login exitoso
-                    setTimeout(() => {
-                        window.location.href = "../index.html";
-                    }, 1000);
-                } else {
-                    alert(result.error || "❌ Usuario o contraseña incorrectos");
-                }
-            } catch (error) {
-                console.error("Error al conectar con el servidor:", error);
-                alert("❌ No se pudo conectar con el servidor");
-            }
+      try {
+        const response = await fetch("https://tlapaleria-backend.onrender.com/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nombre, usuario, correo, password })
         });
+
+        const result = await response.json();
+
+        if (response.status === 201) {
+          alert("✅ Registro exitoso. Ahora puedes iniciar sesión.");
+          form.reset();
+          setTimeout(() => {
+            window.location.href = "../Login/index.html";
+          }, 1500);
+        } 
+        else if (response.status === 409) {
+          alert("⚠️ Ese usuario o correo ya existe. Por favor elige otro.");
+        } 
+        else {
+          alert(result.error || "❌ Ocurrió un error al registrarte.");
+        }
+      } catch (error) {
+        console.error("Error al conectar con el servidor:", error);
+        alert("❌ No se pudo conectar con el servidor. Intenta más tarde.");
+      }
     });
-    </script>
+  });
+  </script>
 </body>
 </html>
