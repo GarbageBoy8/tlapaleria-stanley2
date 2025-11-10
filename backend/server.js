@@ -21,17 +21,40 @@ app.use(cors({
 
 app.use(express.json());
 
-// 🔌 Crear pool de conexiones MySQL (mejor que una conexión única)
-const db = mysql.createPool({
-  host: process.env.DB_HOST,         // Host de Clever Cloud
-  user: process.env.DB_USER,         // Usuario
-  password: process.env.DB_PASSWORD, // Contraseña
-  database: process.env.DB_NAME,     // Nombre de la base de datos
-  port: process.env.DB_PORT || 3306, // Puerto
-  connectionLimit: 10                // Máximo de conexiones simultáneas
-});
+// 🧠 Función para crear pool de MySQL (reutilizable en caso de error)
+let db;
+function createPool() {
+  db = mysql.createPool({
+    host: process.env.DB_HOST,         // Host de Clever Cloud
+    user: process.env.DB_USER,         // Usuario
+    password: process.env.DB_PASSWORD, // Contraseña
+    database: process.env.DB_NAME,     // Nombre de la base de datos
+    port: process.env.DB_PORT || 3306, // Puerto
+    connectionLimit: 10,               // Máximo de conexiones simultáneas
+    waitForConnections: true,          // Espera si no hay conexiones disponibles
+    queueLimit: 0                      // Sin límite de cola
+  });
 
-// 🚀 Probar la conexión inicial al iniciar el servidor
+  console.log('🔁 Pool de conexiones MySQL creado');
+
+  // 🚨 Manejador de errores del pool
+  db.on('error', (err) => {
+    console.error('⚠️ Error en el pool MySQL:', err.code);
+    if (
+      err.code === 'PROTOCOL_CONNECTION_LOST' ||
+      err.code === 'ECONNRESET' ||
+      err.code === 'PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR'
+    ) {
+      console.log('♻️ Reiniciando pool de MySQL...');
+      createPool();
+    }
+  });
+}
+
+// 🧩 Crear el pool por primera vez
+createPool();
+
+// 🚀 Probar conexión inicial
 db.getConnection((err, connection) => {
   if (err) {
     console.error('❌ Error al conectar con MySQL:', err);
@@ -41,13 +64,22 @@ db.getConnection((err, connection) => {
   }
 });
 
+// 💓 Mantener conexión viva (ping cada 5 minutos)
+setInterval(() => {
+  db.query('SELECT 1', (err) => {
+    if (err) {
+      console.error('⚠️ Error en ping a MySQL:', err.code);
+    } else {
+      console.log('💓 Conexión MySQL activa (ping exitoso)');
+    }
+  });
+}, 5 * 60 * 1000); // cada 5 min
+
 // 📥 Ruta para registrar usuarios
 app.post("/register", (req, res) => {
   console.log("📥 Datos recibidos en registro:", req.body);
-
   const { nombre, usuario, correo, password } = req.body;
 
-  // Validación de campos vacíos
   if (!nombre?.trim() || !usuario?.trim() || !correo?.trim() || !password?.trim()) {
     return res.status(400).json({ error: "Faltan datos o hay campos vacíos" });
   }
@@ -57,21 +89,28 @@ app.post("/register", (req, res) => {
     VALUES (?, ?, ?, ?)
   `;
 
-  db.query(sql, [nombre, usuario, correo, password], (err, result) => {
+  db.getConnection((err, connection) => {
     if (err) {
-      console.error("❌ Error al insertar en la base de datos:", err);
-
-      if (err.code === "ER_DUP_ENTRY") {
-        return res.status(409).json({ error: "El usuario o correo ya existe" });
-      }
-
-      return res.status(500).json({ error: "Error al guardar en la base de datos" });
+      console.error("❌ Error al obtener conexión:", err);
+      return res.status(500).json({ error: "Error de conexión con la base de datos" });
     }
 
-    console.log("✅ Usuario insertado con ID:", result.insertId);
-    res.status(201).json({
-      message: "✅ Usuario guardado correctamente",
-      id: result.insertId,
+    connection.query(sql, [nombre, usuario, correo, password], (err, result) => {
+      connection.release(); // ✅ Liberar conexión
+
+      if (err) {
+        console.error("❌ Error al insertar en la base de datos:", err);
+        if (err.code === "ER_DUP_ENTRY") {
+          return res.status(409).json({ error: "El usuario o correo ya existe" });
+        }
+        return res.status(500).json({ error: "Error al guardar en la base de datos" });
+      }
+
+      console.log("✅ Usuario insertado con ID:", result.insertId);
+      res.status(201).json({
+        message: "✅ Usuario guardado correctamente",
+        id: result.insertId,
+      });
     });
   });
 });
@@ -79,7 +118,6 @@ app.post("/register", (req, res) => {
 // 📥 Ruta para verificar inicio de sesión
 app.post('/verify', (req, res) => {
   console.log("📥 Intento de inicio de sesión:", req.body);
-
   const { usuario, password } = req.body;
 
   if (!usuario || !password) {
@@ -87,22 +125,32 @@ app.post('/verify', (req, res) => {
   }
 
   const sql = 'SELECT * FROM crtusuarios WHERE usuario = ? AND password = ?';
-  db.query(sql, [usuario, password], (err, results) => {
+
+  db.getConnection((err, connection) => {
     if (err) {
-      console.error('❌ Error en la consulta:', err);
-      return res.status(500).json({ error: 'Error interno del servidor' });
+      console.error('❌ Error al obtener conexión:', err);
+      return res.status(500).json({ error: 'Error de conexión con la base de datos' });
     }
 
-    if (results.length > 0) {
-      console.log(`✅ Inicio de sesión exitoso: ${usuario}`);
-      res.json({ message: '✅ Inicio de sesión exitoso' });
-    } else {
-      console.log('❌ Usuario o contraseña incorrectos');
-      res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
-    }
+    connection.query(sql, [usuario, password], (err, results) => {
+      connection.release(); // ✅ Liberar conexión
+
+      if (err) {
+        console.error('❌ Error en la consulta:', err);
+        return res.status(500).json({ error: 'Error interno del servidor' });
+      }
+
+      if (results.length > 0) {
+        console.log(`✅ Inicio de sesión exitoso: ${usuario}`);
+        res.json({ message: '✅ Inicio de sesión exitoso' });
+      } else {
+        console.log('❌ Usuario o contraseña incorrectos');
+        res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
+      }
+    });
   });
 });
-//comentario prueba
+
 // 🌐 Ruta raíz para verificar el estado del servidor
 app.get('/', (req, res) => {
   res.send('Servidor backend conectado a Clever Cloud 🚀');
