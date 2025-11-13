@@ -302,15 +302,62 @@ h2 {
 .card-producto:hover {
     transform: translateY(-5px);
 }
+.imagen-contenedor {
+    position: relative; /* Clave para posicionar el overlay encima */
+    width: 100%;
+    height: 200px; /* Usamos la altura que ya tenías */
+    margin-bottom: 1.5rem; /* Movimos esto de la 'img' aquí */
+    border-radius: 0.5rem; /* Movimos esto de la 'img' aquí */
+    overflow: hidden; /* Para que el overlay respete los bordes redondeados */
+}
 
 .card-producto img {
     width: 100%;
     height: 200px;
     object-fit: cover;
-    border-radius: 0.5rem;
-    margin-bottom: 1.5rem;
+	transition: transform 0.3s ease;;
+	border-radius: 10px;
 }
 
+.imagen-contenedor:hover .overlay-descripcion {
+    opacity: 1; /* Hacemos visible el overlay */
+}
+
+.imagen-contenedor:hover img {
+    transform: scale(1.1); /* La imagen crece un 10% */
+}
+.main-catalogo {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.overlay-descripcion {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    /* El fondo oscuro (opaco) que pediste */
+    background: rgba(0, 0, 0, 0.6); /* Negro con 60% de opacidad */
+    
+    /* El texto blanco que pediste */
+    color: #fff; 
+    
+    /* Para centrar el texto */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1rem;
+    
+    /* Oculto por defecto */
+    opacity: 0;
+    
+    /* Transición suave al aparecer */
+    transition: opacity 0.3s ease;
+}
 .card-producto h2 {
     font-size: 1.8rem;
     margin-bottom: 1rem;
