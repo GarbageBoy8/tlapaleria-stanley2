@@ -117,7 +117,9 @@ app.post("/register", (req, res) => {
   });
 });
 
-// 📥 Ruta para verificar inicio de sesión
+// ================================================================
+// 📥 Ruta para verificar inicio de sesión (MODIFICADA)
+// ================================================================
 app.post('/verify', (req, res) => {
   console.log("📥 Intento de inicio de sesión:", req.body);
   const { usuario, password } = req.body;
@@ -126,7 +128,8 @@ app.post('/verify', (req, res) => {
     return res.status(400).json({ error: 'Faltan datos' });
   }
 
-  const sql = 'SELECT * FROM crtusuarios WHERE usuario = ? AND password = ?';
+  // Seleccionamos solo los datos que necesitamos, NUNCA la contraseña
+  const sql = 'SELECT id, nombre, usuario, correo FROM crtusuarios WHERE usuario = ? AND password = ?';
 
   db.getConnection((err, connection) => {
     if (err) {
@@ -144,7 +147,13 @@ app.post('/verify', (req, res) => {
 
       if (results.length > 0) {
         console.log(`✅ Inicio de sesión exitoso: ${usuario}`);
-        res.json({ message: '✅ Inicio de sesión exitoso' });
+        
+        // ¡CAMBIO CLAVE! Enviamos el objeto de usuario al frontend
+        res.json({ 
+            message: '✅ Inicio de sesión exitoso',
+            usuario: results[0] // Contiene { id, nombre, usuario, correo }
+        });
+      
       } else {
         console.log('❌ Usuario o contraseña incorrectos');
         res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
@@ -152,6 +161,118 @@ app.post('/verify', (req, res) => {
     });
   });
 });
+
+
+// ================================================================
+// 🛒 RUTAS DEL CARRITO DE COMPRAS (AÑADIDAS)
+// ================================================================
+
+/**
+ * 1. OBTENER el carrito de un usuario
+ * Se usa un JOIN para traer los datos del producto (nombre, precio, etc.)
+ */
+app.get('/carrito/:id_usuario', (req, res) => {
+  const { id_usuario } = req.params;
+  
+  // Asegúrate de que tu tabla 'productos' tenga una columna para la imagen (ej: 'imagen_url')
+  // Si no la tiene, quita 'p.imagen_url' de la consulta.
+  const sql = `
+    SELECT 
+      c.id_producto,
+      c.cantidad,
+      p.nombre,
+      p.precio,
+      p.imagen_url  -- CAMBIA ESTO si tu columna de imagen se llama diferente
+    FROM carrito c
+    JOIN productos p ON c.id_producto = p.id_producto
+    WHERE c.id_usuario = ?
+  `;
+  
+  db.getConnection((err, connection) => {
+    if (err) {
+      console.error('❌ Error al obtener conexión:', err);
+      return res.status(500).json({ error: 'Error de conexión' });
+    }
+    
+    connection.query(sql, [id_usuario], (err, results) => {
+      connection.release();
+      if (err) {
+        console.error('❌ Error en la consulta GET carrito:', err);
+        return res.status(500).json({ error: 'Error interno' });
+      }
+      res.json(results);
+    });
+  });
+});
+
+/**
+ * 2. AGREGAR un producto al carrito
+ * Usa "ON DUPLICATE KEY UPDATE" para sumar la cantidad si el producto ya existe.
+ */
+app.post('/carrito/agregar', (req, res) => {
+  const { id_usuario, id_producto, cantidad } = req.body;
+
+  if (!id_usuario || !id_producto || !cantidad) {
+    return res.status(400).json({ error: 'Faltan datos (usuario, producto, cantidad)' });
+  }
+
+  // Esta consulta inserta O actualiza si la llave (id_usuario, id_producto) ya existe
+  const sql = `
+    INSERT INTO carrito (id_usuario, id_producto, cantidad)
+    VALUES (?, ?, ?)
+    ON DUPLICATE KEY UPDATE cantidad = cantidad + VALUES(cantidad)
+  `;
+
+  db.getConnection((err, connection) => {
+    if (err) {
+      console.error('❌ Error al obtener conexión:', err);
+      return res.status(500).json({ error: 'Error de conexión' });
+    }
+
+    connection.query(sql, [id_usuario, id_producto, cantidad], (err, result) => {
+      connection.release();
+      if (err) {
+        console.error('❌ Error al agregar al carrito:', err);
+        return res.status(500).json({ error: 'Error al agregar' });
+      }
+      res.status(201).json({ message: 'Producto agregado al carrito', affectedRows: result.affectedRows });
+    });
+  });
+});
+
+/**
+ * 3. VACIAR el carrito de un usuario
+ */
+app.post('/carrito/vaciar', (req, res) => {
+  const { id_usuario } = req.body;
+
+  if (!id_usuario) {
+    return res.status(400).json({ error: 'Falta id_usuario' });
+  }
+
+  const sql = 'DELETE FROM carrito WHERE id_usuario = ?';
+
+  db.getConnection((err, connection) => {
+    if (err) {
+      console.error('❌ Error al obtener conexión:', err);
+      return res.status(500).json({ error: 'Error de conexión' });
+    }
+
+    connection.query(sql, [id_usuario], (err, result) => {
+      connection.release();
+      if (err) {
+        console.error('❌ Error al vaciar carrito:', err);
+        return res.status(500).json({ error: 'Error al vaciar' });
+      }
+      res.json({ message: 'Carrito vaciado exitosamente' });
+    });
+  });
+});
+
+
+// ================================================================
+// RUTAS DE VERIFICACIÓN (SIN CAMBIOS)
+// ================================================================
 
 // 🌐 Ruta raíz para verificar el estado del servidor
 app.get('/', (req, res) => {
