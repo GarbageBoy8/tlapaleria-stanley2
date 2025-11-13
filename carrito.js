@@ -61,12 +61,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const boton = evento.target;
         const card = boton.closest('.card-producto');
         const nombre = card.querySelector('.producto-nombre').innerText;
-        const precioTexto = card.querySelector('.producto-precio').innerText;
-        const imagenSrc = card.querySelector('.producto-imagen').src;
+        const precioTexto = card.querySelector('.precio').innerText;
+        const imagenSrc = card.querySelector('.producto-imagen img').src;
         const precio = parseFloat(precioTexto.replace('$', '').replace(',', ''));
 
         const producto = {
-            id: boton.dataset.id,
+            id: nombre.toLowerCase().replace(/\s+/g, '-'),
             nombre: nombre,
             precio: precio,
             imagen: imagenSrc,
