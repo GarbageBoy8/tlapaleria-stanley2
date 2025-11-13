@@ -36,7 +36,7 @@ function createPool() {
     waitForConnections: true,          // Espera si no hay conexiones disponibles
     queueLimit: 0                      // Sin límite de cola
   });
-// prueba de commit
+
   console.log('🔁 Pool de conexiones MySQL creado');
 
   // 🚨 Manejador de errores del pool
