@@ -1,0 +1,85 @@
+/* Estilos generales */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 25px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* --- NUEVO ESTILO PARA EL ICONO DE PERFIL --- */
+.profile-initial-icon {
+    width: 80px;  /* Más grande que el de la cabecera */
+    height: 80px;
+    border-radius: 50%; /* Círculo perfecto */
+    background-color: #3498db; /* Color de fondo */
+    color: white;
+    font-size: 2.5rem; /* Tamaño de la letra (inicial) */
+    font-weight: bold;
+    
+    /* Para centrar la letra dentro del círculo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    text-transform: uppercase;
+    
+    /* --- PARA CENTRAR EL CÍRCULO EN LA PÁGINA --- */
+    margin: 0 auto 20px auto; /* Arriba: 0, Izq/Der: auto, Abajo: 20px */
+}
+
+
+/* --- MODIFICADO: h1 ahora está centrado --- */
+h1 {
+    text-align: center; /* Centra el saludo */
+    color: #2c3e50;
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 10px;
+}
+
+/* El h2 de "Mis Compras" se mantiene alineado a la izquierda */
+h2 {
+    color: #2c3e50;
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 10px;
+}
+
+#display-name {
+    color: #3498db;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #ecf0f1;
+    margin: 30px 0;
+}
+
+/* Lista de Compras (sin cambios) */
+.purchase-list {
+    list-style: none;
+    padding: 0;
+}
+/* ... (resto de estilos de .purchase-list sin cambios) ... */
+.purchase-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #ecf0f1;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #fafafa;
+}
+.purchase-list .item-name { font-weight: 600; }
+.purchase-list .item-date { font-size: 0.9em; color: #7f8c8d; }
+.purchase-list .item-price { font-weight: 600; color: #27ae60; }
