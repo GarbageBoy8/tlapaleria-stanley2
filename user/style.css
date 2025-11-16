@@ -80,6 +80,17 @@ hr {
     margin-bottom: 10px;
     background-color: #fafafa;
 }
+.profile-initial-icon img {
+    width: 50px;
+    height: 50px;
+   margin: 0 0 0 13px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+.profile-initial-icon h1 {
+    margin: 0;
+    font-size: 1.2em;
+}   
 .purchase-list .item-name { font-weight: 600; }
 .purchase-list .item-date { font-size: 0.9em; color: #7f8c8d; }
 .purchase-list .item-price { font-weight: 600; color: #27ae60; }
