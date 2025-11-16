@@ -157,14 +157,6 @@ document.addEventListener('DOMContentLoaded', () => {
         actualizarVistaDelCarrito();
     }
 
-    /**
-     * Vacía el carrito en memoria y actualiza la vista.
-     * 
-     */
-    function limpiarCarrito() {
-        carrito = [];
-        actualizarVistaDelCarrito();
-    }
 
     /**
      * Muestra la notificación toast con un mensaje.
