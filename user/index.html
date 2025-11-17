@@ -1,26 +1,28 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
     <div class="container">
-
         <div class="profile-initial-icon" id="profilePageIcon">
             <img src="IMG/users-svgrepo-com.svg" alt="">
         </div>
         <h1>Hola, <span id="display-name">...</span></h1>
 
+        <!-- Barra de Navegación Agregada -->
+        <nav class="profile-nav">
+            <button class="nav-btn active" data-section="purchases">Mis Compras</button>
+            <button class="nav-btn" data-section="appointments">Mis Citas</button>
+        </nav>
 
         <hr>
 
-        <section class="user-purchases">
+        <!-- Sección de Compras (visible por defecto) -->
+        <section class="content-section active" id="purchases-section">
             <h2>Mis Compras</h2>
             <ul class="purchase-list">
                 <li>
@@ -35,10 +37,33 @@
                 </li>
             </ul>
         </section>
+
+        <!-- Sección de Citas (oculta inicialmente) -->
+        <section class="content-section" id="appointments-section">
+            <h2>Mis Citas Anteriores</h2>
+            <ul class="appointments-list">
+                <li>
+                    <span class="appointment-service">Corte de Cabello</span>
+                    <span class="appointment-date">Fecha: 15/11/2025</span>
+                    <span class="appointment-time">Hora: 14:30</span>
+                    <span class="appointment-status">Completada</span>
+                </li>
+                <li>
+                    <span class="appointment-service">Consulta Médica</span>
+                    <span class="appointment-date">Fecha: 08/11/2025</span>
+                    <span class="appointment-time">Hora: 10:00</span>
+                    <span class="appointment-status">Completada</span>
+                </li>
+                <li>
+                    <span class="appointment-service">Masaje Relajante</span>
+                    <span class="appointment-date">Fecha: 20/11/2025</span>
+                    <span class="appointment-time">Hora: 16:00</span>
+                    <span class="appointment-status">Programada</span>
+                </li>
+            </ul>
+        </section>
     </div>
 
     <script src="app.js"></script>
-
 </body>
-
 </html>

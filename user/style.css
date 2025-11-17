@@ -1,3 +1,10 @@
+
+:root {
+	--icon-color: #040F44;
+	--primary-color: #06196F;
+	--background-color: #f9f5f0;
+	--dark-color: #151515;
+}
 /* Estilos generales */
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -16,60 +23,88 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* --- NUEVO ESTILO PARA EL ICONO DE PERFIL --- */
+/* Icono de perfil */
 .profile-initial-icon {
-    width: 80px;  /* Más grande que el de la cabecera */
+    width: 80px;
     height: 80px;
-    border-radius: 50%; /* Círculo perfecto */
-    background-color: #3498db; /* Color de fondo */
+    border-radius: 50%;
+    background-color: #3498db;
     color: white;
-    font-size: 2.5rem; /* Tamaño de la letra (inicial) */
+    font-size: 2.5rem;
     font-weight: bold;
-    
-    /* Para centrar la letra dentro del círculo */
     display: flex;
     justify-content: center;
     align-items: center;
-    
     text-transform: uppercase;
+    margin: 0 auto 20px auto;
+}
+
+.profile-initial-icon img {
+    width: 50px;
+    height: 50px;
+    margin: 0 0 0 3px;
     
-    /* --- PARA CENTRAR EL CÍRCULO EN LA PÁGINA --- */
-    margin: 0 auto 20px auto; /* Arriba: 0, Izq/Der: auto, Abajo: 20px */
+    object-fit: cover;
 }
 
-
-/* --- MODIFICADO: h1 ahora está centrado --- */
 h1 {
-    text-align: center; /* Centra el saludo */
+    text-align: center;
     color: #2c3e50;
     border-bottom: 2px solid #ecf0f1;
     padding-bottom: 10px;
 }
 
-/* El h2 de "Mis Compras" se mantiene alineado a la izquierda */
-h2 {
-    color: #2c3e50;
-    border-bottom: 2px solid #ecf0f1;
-    padding-bottom: 10px;
+/* Barra de Navegación */
+.profile-nav {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    gap: 10px;
 }
 
-#display-name {
-    color: #3498db;
+.nav-btn {
+    padding: 12px 24px;
+    border: 2px solid var(--primary-color);
+    background-color: white;
+    color: #040F44;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
 }
 
-hr {
-    border: 0;
-    height: 1px;
-    background: #ecf0f1;
-    margin: 30px 0;
+.nav-btn:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
 }
 
-/* Lista de Compras (sin cambios) */
+.nav-btn.active {
+    background-color:var(--primary-color);
+    color: white;
+}
+
+/* Secciones de contenido */
+.content-section {
+    display: none;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.content-section.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Lista de Compras */
 .purchase-list {
     list-style: none;
     padding: 0;
 }
-/* ... (resto de estilos de .purchase-list sin cambios) ... */
+
 .purchase-list li {
     display: flex;
     justify-content: space-between;
@@ -80,17 +115,61 @@ hr {
     margin-bottom: 10px;
     background-color: #fafafa;
 }
-.profile-initial-icon img {
-    width: 50px;
-    height: 50px;
-   margin: 0 0 0 17px;
-    object-fit: cover;
-    margin-right: 15px;
-}
-.profile-initial-icon h1 {
-    margin: 0;
-    font-size: 1.2em;
-}   
+
 .purchase-list .item-name { font-weight: 600; }
 .purchase-list .item-date { font-size: 0.9em; color: #7f8c8d; }
 .purchase-list .item-price { font-weight: 600; color: #27ae60; }
+
+/* Lista de Citas */
+.appointments-list {
+    list-style: none;
+    padding: 0;
+}
+
+.appointments-list li {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 15px;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #ecf0f1;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #fafafa;
+}
+
+.appointments-list .appointment-service { 
+    font-weight: 600; 
+    color: #2c3e50;
+}
+
+.appointments-list .appointment-date, 
+.appointments-list .appointment-time { 
+    font-size: 0.9em; 
+    color: #7f8c8d;
+}
+
+.appointments-list .appointment-status {
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.8em;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.appointment-status:contains("Completada") {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.appointment-status:contains("Programada") {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #ecf0f1;
+    margin: 30px 0;
+}

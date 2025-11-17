@@ -1,3 +1,30 @@
+
+// Navegación entre secciones
+document.addEventListener('DOMContentLoaded', function() {
+    const navButtons = document.querySelectorAll('.nav-btn');
+    const sections = document.querySelectorAll('.content-section');
+    
+    // Configurar evento para cada botón de navegación
+    navButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const targetSection = this.getAttribute('data-section');
+            
+            // Remover clase active de todos los botones y secciones
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Agregar clase active al botón clickeado y sección correspondiente
+            this.classList.add('active');
+            document.getElementById(`${targetSection}-section`).classList.add('active');
+        });
+    });
+    
+    // Simular datos del usuario (puedes reemplazar con datos reales)
+    const displayName = document.getElementById('display-name');
+    displayName.textContent = 'Usuario'; // Puedes cambiar esto por el nombre real
+});
+
+
 // Espera a que todo el contenido HTML se haya cargado
 document.addEventListener("DOMContentLoaded", function() {
     

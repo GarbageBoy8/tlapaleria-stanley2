@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración </title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Panel de Administración</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active"><i>📊</i> Dashboard</a></li>
+                <li><a href="#"><i>💰</i> Ventas</a></li>
+                <li><a href="#"><i>👥</i> Clientes</a></li>
+                <li><a href="#"><i>📦</i> Productos</a></li>
+                <li><a href="#"><i>📈</i> Reportes</a></li>
+                <li><a href="#"><i>⚙️</i> Configuración</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Panel de Ventas</h1>
+                <div class="user-info">
+                    <img src="https://via.placeholder.com/40" alt="Usuario">
+                    <span>Administrador</span>
+                </div>
+            </div>
+
+            <!-- Dashboard Cards -->
+            <div class="dashboard-cards">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Ventas Totales</div>
+                        <div class="card-icon sales">💰</div>
+                    </div>
+                    <div class="card-value">$24,580</div>
+                    <div class="card-change">+12.5% vs mes anterior</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Ingresos</div>
+                        <div class="card-icon revenue">💵</div>
+                    </div>
+                    <div class="card-value">$18,420</div>
+                    <div class="card-change">+8.3% vs mes anterior</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Clientes Nuevos</div>
+                        <div class="card-icon customers">👥</div>
+                    </div>
+                    <div class="card-value">142</div>
+                    <div class="card-change">+5.2% vs mes anterior</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Productos Vendidos</div>
+                        <div class="card-icon products">📦</div>
+                    </div>
+                    <div class="card-value">856</div>
+                    <div class="card-change negative">-2.1% vs mes anterior</div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label for="date-range">Rango de Fechas</label>
+                        <input type="date" id="date-from">
+                        <span>a</span>
+                        <input type="date" id="date-to">
+                    </div>
+                    <div class="filter-group">
+                        <label for="status">Estado</label>
+                        <select id="status">
+                            <option value="">Todos</option>
+                            <option value="completed">Completado</option>
+                            <option value="pending">Pendiente</option>
+                            <option value="cancelled">Cancelado</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="customer">Cliente</label>
+                        <select id="customer">
+                            <option value="">Todos los clientes</option>
+                            <option value="1">Juan Pérez</option>
+                            <option value="2">María García</option>
+                            <option value="3">Carlos López</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-actions">
+                    <button class="btn btn-secondary">Limpiar</button>
+                    <button class="btn btn-primary" id="apply-filters">Aplicar Filtros</button>
+                </div>
+            </div>
+
+            <!-- Sales Table -->
+            <div class="sales-table-container">
+                <div class="table-header">
+                    <div class="table-title">Historial de Ventas</div>
+                    <div class="table-actions">
+                        <button class="btn btn-primary" id="export-btn">Exportar</button>
+                        <button class="btn btn-primary" id="refresh-btn">Actualizar</button>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Venta</th>
+                            <th>Fecha</th>
+                            <th>Cliente</th>
+                            <th>Productos</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sales-table-body">
+                        <!-- Las filas se llenarán con JavaScript -->
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <div class="pagination-info">Mostrando 1-10 de 124 ventas</div>
+                    <div class="pagination-controls">
+                        <button class="pagination-btn">Anterior</button>
+                        <button class="pagination-btn active">1</button>
+                        <button class="pagination-btn">2</button>
+                        <button class="pagination-btn">3</button>
+                        <button class="pagination-btn">Siguiente</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+
+    <script src="app.js"></script>
+</body>
+</html>
