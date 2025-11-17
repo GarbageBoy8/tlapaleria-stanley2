@@ -44,7 +44,7 @@
 					<li><a href="./Nosotros/index.html">Nosotros</a></li>
 					<li><a href="./catlogo/index.html">Nuestros Productos</a></li>
 					<li><a href="./citas_reparaciones/index.html">reparaciones</a></li>
-					<li><a href="../contacto/index.html">contacto</a></li>
+					<li><a href="./contacto/index.html">contacto</a></li>
 				</ul>
 
 
@@ -221,7 +221,7 @@
 			</p>
 
 			<ul class="caracteristicas">
-				<li>Un producto de buena calidad.</B></li>
+				<li>Un producto de buena calidad.</li>
 				<li>Una garantia extensa y accesible.</li>
 				<li>Facilidad para poder comunicarte con nosotros y poder ayudarte.</li>
 			</ul>
@@ -311,13 +311,12 @@
 						<li><a href="#">DESARMADORES</a></li>
 						<li><a href="#">HERRAMIENTAS DE CORTE</a></li>
 						<li><a href="#">BOMBAS</a></li>
-						<li><a href="#">TTORNILLOS</a></li>
-						<li><a href="#">MARTTILLOS</a></li>
+						<li><a href="#">TORNILLOS</a></li>
+						<li><a href="#">MARTILLOS</a></li>
 						<li><a href="#">MAQUINARIA</a></li>
 					</ul>
 				</nav>
 			</div>
-
 			<div class="footer-col-contacto">
 				<h4 class="footer-titulo">Contacto</h4>
 
@@ -352,31 +351,6 @@
 
 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
-	<!-- formulario -->
-	<script>
-		document
-			.getElementById("loginForm")
-			.addEventListener("submit", async (e) => {
-				e.preventDefault();
-				const username = document.getElementById("username").value;
-				const password = document.getElementById("password").value;
-
-				try {
-					const res = await fetch("http://localhost:3000/login", {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({ username, password }),
-					});
-
-					const result = await res.json();
-					alert(result.message);
-				} catch (error) {
-					alert("❌ No se pudo conectar con el servidor");
-					console.error(error);
-				}
-			});
-	</script>
 
 	<script src="https://kit.fontawesome.com/44e03b64d7.js" crossorigin="anonymous"></script>
 	<script src="main.js"></script>
