@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
@@ -211,57 +210,142 @@ html {
 /*           BANNER CONTACTO          */
 /* ********************************** */
 .banner {
-    background-image: linear-gradient(100deg, #000020, #00000020), url('../img/fondo.webp');
-    background-size: cover;
-    background-position: center;
-    height: 20rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	background-image: linear-gradient(100deg, #000020, #00000020), url('../img/fondo.webp');
+	background-size: cover;
+	background-position: center;
+	height: 20rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .content-banner h2 {
-    text-align: initial;
-    font-size: 5rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    color: #fff;
+	text-align: initial;
+	font-size: 5rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	color: #fff;
 }
 
 /* Estilo del Contenedor Principal */
 .contact-page {
-    
-    padding: 40px 20px;
-    background-color: #f7f7f7;
+
+	padding: 40px 20px;
+	background-color: #f7f7f7;
 }
 
 .contact-container {
-    display: flex;
-    gap: 30px;
-    max-width: 1200px;
-    margin: 0 auto;
-    background-color: #fff;
-    border-radius: 20px;
-    
+	display: flex;
+	gap: 30px;
+	max-width: 1200px;
+	margin: 0 auto;
+	background-color: #fff;
+	border-radius: 20px;
+
 }
 
 /* Estilos Comunes */
 .etiqueta {
-    display: inline-block;
-    background-color: var(--light-grey);
-    padding: 5px 15px;
-    border-radius: 20px;
-    color: var(--text-color);
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: 10px;
+	display: inline-block;
+	background-color: var(--light-grey);
+	padding: 5px 15px;
+	border-radius: 20px;
+	color: var(--text-color);
+	font-size: 0.9rem;
+	font-weight: 600;
+	margin-bottom: 10px;
 }
 
 h1,
 h2 {
-    color: var(--dark-color);
-    font-weight: 700;
-    margin-top: 0;
+	color: var(--dark-color);
+	font-weight: 700;
+	margin-top: 0;
+}
+
+/* ********************************** */
+/*             MENU DE NAVEGACION     */
+/* ********************************** */
+
+.category-nav {
+	background-color: var(--primary-color);
+	padding: 0;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+}
+
+.category-nav ul {
+	list-style: none;
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.category-nav li {
+	flex: 1;
+	min-width: 150px;
+}
+
+.category-nav a {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 60px;
+	padding: 1px 20px;
+	text-decoration: none;
+	color: white;
+	text-align: center;
+	font-weight: 500;
+	font-size: 16px;
+	transition: all 0.3s ease;
+	border-bottom: 3px solid transparent;
+	line-height: 1.3;
+}
+
+.category-nav a:hover {
+	background-color: rgba(255, 255, 255, 0.15);
+	border-bottom: 3px solid white;
+	transform: translateY(-2px);
+}
+
+.category-nav a:active {
+	transform: translateY(0);
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+	.category-nav ul {
+		flex-direction: column;
+	}
+
+	.category-nav li {
+		min-width: 100%;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.category-nav li:last-child {
+		border-bottom: none;
+	}
+
+	.category-nav a {
+		padding: 15px;
+	}
+}
+
+/* Contenido de ejemplo */
+.content {
+	padding: 40px 20px;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.content h1 {
+	color: #333;
+	margin-bottom: 20px;
 }
 
 
@@ -271,139 +355,151 @@ h2 {
 /* ********************************** */
 
 .main-catalogo {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 2rem;
 }
 
 .title-catalogo {
-    text-align: center;
-    font-size: 3rem;
-    margin-bottom: 4rem;
-    color: var(--dark-color);
+	text-align: center;
+	font-size: 3rem;
+	margin-bottom: 4rem;
+	color: var(--dark-color);
 }
 
 .grid-catalogo {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 3rem;
-    padding: 2rem 0;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 3rem;
+	padding: 2rem 0;
 }
 
 .card-producto {
-    background: #fff;
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
-    text-align: center;
+	background: #fff;
+	padding: 2rem;
+	border-radius: 1rem;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	transition: transform 0.3s ease;
+	text-align: center;
 }
 
 .card-producto:hover {
-    transform: translateY(-5px);
+	transform: translateY(-5px);
 }
+
 .imagen-contenedor {
-    position: relative; /* Clave para posicionar el overlay encima */
-    width: 100%;
-    height: 200px; /* Usamos la altura que ya tenías */
-    margin-bottom: 1.5rem; /* Movimos esto de la 'img' aquí */
-    border-radius: 0.5rem; /* Movimos esto de la 'img' aquí */
-    overflow: hidden; /* Para que el overlay respete los bordes redondeados */
+	position: relative;
+	/* Clave para posicionar el overlay encima */
+	width: 100%;
+	height: 200px;
+	/* Usamos la altura que ya tenías */
+	margin-bottom: 1.5rem;
+	/* Movimos esto de la 'img' aquí */
+	border-radius: 0.5rem;
+	/* Movimos esto de la 'img' aquí */
+	overflow: hidden;
+	/* Para que el overlay respete los bordes redondeados */
 }
 
 .card-producto img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-	transition: transform 0.3s ease;;
+	width: 100%;
+	height: 200px;
+	object-fit: cover;
+	transition: transform 0.3s ease;
+	;
 	border-radius: 10px;
 }
 
 .imagen-contenedor:hover .overlay-descripcion {
-    opacity: 1; /* Hacemos visible el overlay */
+	opacity: 1;
+	/* Hacemos visible el overlay */
 }
 
 .imagen-contenedor:hover img {
-    transform: scale(1.1); /* La imagen crece un 10% */
+	transform: scale(1.1);
+	/* La imagen crece un 10% */
 }
+
 .main-catalogo {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 2rem;
 }
 
 .overlay-descripcion {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    
-    /* El fondo oscuro (opaco) que pediste */
-    background: rgba(0, 0, 0, 0.6); /* Negro con 60% de opacidad */
-    
-    /* El texto blanco que pediste */
-    color: #fff; 
-    
-    /* Para centrar el texto */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 1rem;
-    
-    /* Oculto por defecto */
-    opacity: 0;
-    
-    /* Transición suave al aparecer */
-    transition: opacity 0.3s ease;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+
+	/* El fondo oscuro (opaco) que pediste */
+	background: rgba(0, 0, 0, 0.6);
+	/* Negro con 60% de opacidad */
+
+	/* El texto blanco que pediste */
+	color: #fff;
+
+	/* Para centrar el texto */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	padding: 1rem;
+
+	/* Oculto por defecto */
+	opacity: 0;
+
+	/* Transición suave al aparecer */
+	transition: opacity 0.3s ease;
 }
+
 .card-producto h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-    color: var(--dark-color);
+	font-size: 1.8rem;
+	margin-bottom: 1rem;
+	color: var(--dark-color);
 }
 
 .precio {
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-bottom: 1.5rem;
+	font-size: 2rem;
+	font-weight: 600;
+	color: var(--primary-color);
+	margin-bottom: 1.5rem;
 }
 
 .btn-agregar-carrito {
-    background: var(--primary-color);
-    color: #fff;
-    border: none;
-    padding: 1rem 2rem;
-    border-radius: 2rem;
-    font-size: 1.4rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+	background: var(--primary-color);
+	color: #fff;
+	border: none;
+	padding: 1rem 2rem;
+	border-radius: 2rem;
+	font-size: 1.4rem;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
 }
 
 .btn-agregar-carrito:hover {
-    background: var(--icon-color);
+	background: var(--icon-color);
 }
 
 /* Responsive design */
 @media (max-width: 768px) {
-    .grid-catalogo {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 2rem;
-    }
-    
-    .card-producto {
-        padding: 1.5rem;
-    }
-    
-    .card-producto h2 {
-        font-size: 1.6rem;
-    }
-    
-    .precio {
-        font-size: 1.8rem;
-    }
+	.grid-catalogo {
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 2rem;
+	}
+
+	.card-producto {
+		padding: 1.5rem;
+	}
+
+	.card-producto h2 {
+		font-size: 1.6rem;
+	}
+
+	.precio {
+		font-size: 1.8rem;
+	}
 }
 
 
