@@ -71,13 +71,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(`${API_BASE_URL}/productos`);
             if (response.ok) {
                 const productos = await response.json();
+                console.log('Productos cargados desde BD:', productos);
                 // Crear mapa: nombre -> id_producto
                 productos.forEach(prod => {
                     mapaProductos[prod.nombre] = prod.id_producto;
                 });
+                console.log('Mapa de productos creado:', mapaProductos);
+            } else {
+                console.error('Error al cargar productos. Status:', response.status);
+                const errorText = await response.text();
+                console.error('Error response:', errorText);
             }
         } catch (error) {
             console.error('Error al cargar productos:', error);
+            mostrarToast('⚠️ Error al cargar productos. Verifica la conexión.');
         }
     }
 
@@ -120,16 +127,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const boton = evento.target;
         const card = boton.closest('.card-producto');
-        const nombre = card.querySelector('.producto-nombre').innerText.trim();
+        const nombreElemento = card.querySelector('.producto-nombre');
+        
+        if (!nombreElemento) {
+            mostrarToast('❌ Error: No se pudo encontrar el nombre del producto');
+            console.error('Elemento .producto-nombre no encontrado');
+            return;
+        }
+        
+        const nombre = nombreElemento.innerText.trim();
+        console.log('Nombre del producto obtenido del HTML:', nombre);
+        console.log('Mapa de productos disponible:', Object.keys(mapaProductos));
         
         // Buscar el id_producto usando el mapa
         const id_producto = mapaProductos[nombre];
         
         if (!id_producto) {
             mostrarToast('❌ Error: Producto no encontrado en la base de datos');
-            console.error('Producto no encontrado:', nombre);
+            console.error('Producto no encontrado en el mapa. Nombre buscado:', nombre);
+            console.error('Productos disponibles en BD:', Object.keys(mapaProductos));
+            console.error('¿Coinciden exactamente? Verifica mayúsculas, minúsculas y espacios.');
             return;
         }
+        
+        console.log('ID del producto encontrado:', id_producto);
 
         try {
             const response = await fetch(`${API_BASE_URL}/carrito/agregar`, {
