@@ -48,6 +48,7 @@
         <p><a href="../Inicio de Sesion/index.html">Ya tengo una Cuenta</a></p>
     </div>
     <!-- script para enlace a BD -->
+<script src="../config.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("loginForm");
@@ -66,8 +67,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         try {
-            // 🚀 Ahora usamos la URL del backend en Render
-            const response = await fetch("https://tlapaleria-backend.onrender.com/register", {
+            // 🚀 Usamos la URL del backend desde config.js
+            const response = await fetch(`${API_BASE_URL}/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
