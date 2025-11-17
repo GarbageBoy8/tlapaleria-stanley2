@@ -21,7 +21,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Cargar mapa de productos desde el backend
-    cargarMapaProductos();
+    cargarMapaProductos().then(() => {
+        // Verificar que se cargaron productos
+        if (Object.keys(mapaProductos).length === 0) {
+            console.warn('⚠️ No se encontraron productos en la base de datos. Asegúrate de ejecutar insertar_productos.sql');
+            mostrarToast('⚠️ No hay productos en la BD. Ejecuta el SQL de inserción.');
+        } else {
+            console.log('✅ Productos cargados correctamente:', Object.keys(mapaProductos).length, 'productos');
+        }
+    });
 
     // Si hay usuario logueado, cargar su carrito
     if (usuarioActual) {
@@ -68,23 +76,34 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     async function cargarMapaProductos() {
         try {
+            console.log('🔄 Intentando cargar productos desde:', `${API_BASE_URL}/productos`);
             const response = await fetch(`${API_BASE_URL}/productos`);
+            
             if (response.ok) {
                 const productos = await response.json();
-                console.log('Productos cargados desde BD:', productos);
+                console.log('✅ Productos cargados desde BD:', productos);
+                
+                if (productos.length === 0) {
+                    console.warn('⚠️ La base de datos está vacía. No hay productos insertados.');
+                    mostrarToast('⚠️ No hay productos en la BD. Ejecuta insertar_productos.sql');
+                    return;
+                }
+                
                 // Crear mapa: nombre -> id_producto
                 productos.forEach(prod => {
                     mapaProductos[prod.nombre] = prod.id_producto;
                 });
-                console.log('Mapa de productos creado:', mapaProductos);
+                console.log('✅ Mapa de productos creado:', mapaProductos);
+                console.log('📋 Productos disponibles:', Object.keys(mapaProductos));
             } else {
-                console.error('Error al cargar productos. Status:', response.status);
+                console.error('❌ Error al cargar productos. Status:', response.status);
                 const errorText = await response.text();
-                console.error('Error response:', errorText);
+                console.error('❌ Error response:', errorText);
+                mostrarToast('❌ Error al cargar productos del servidor');
             }
         } catch (error) {
-            console.error('Error al cargar productos:', error);
-            mostrarToast('⚠️ Error al cargar productos. Verifica la conexión.');
+            console.error('❌ Error de conexión al cargar productos:', error);
+            mostrarToast('❌ Error de conexión. Verifica que el backend esté funcionando.');
         }
     }
 
