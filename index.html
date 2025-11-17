@@ -352,31 +352,6 @@
 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-	<!-- formulario -->
-	<script>
-		document
-			.getElementById("loginForm")
-			.addEventListener("submit", async (e) => {
-				e.preventDefault();
-				const username = document.getElementById("username").value;
-				const password = document.getElementById("password").value;
-
-				try {
-					const res = await fetch("http://localhost:3000/login", {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({ username, password }),
-					});
-
-					const result = await res.json();
-					alert(result.message);
-				} catch (error) {
-					alert("❌ No se pudo conectar con el servidor");
-					console.error(error);
-				}
-			});
-	</script>
-
 	<script src="https://kit.fontawesome.com/44e03b64d7.js" crossorigin="anonymous"></script>
 	<script src="main.js"></script>
 </body>
