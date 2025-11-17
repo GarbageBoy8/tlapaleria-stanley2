@@ -170,20 +170,18 @@ app.post('/verify', (req, res) => {
 
 /**
  * 1. OBTENER el carrito de un usuario
- * Se usa un JOIN para traer los datos del producto (nombre, precio, etc.)
+ * Se usa un JOIN para traer los datos del producto (nombre, precio, descripcion)
  */
 app.get('/carrito/:id_usuario', (req, res) => {
   const { id_usuario } = req.params;
   
-  // Asegúrate de que tu tabla 'productos' tenga una columna para la imagen (ej: 'imagen_url')
-  // Si no la tiene, quita 'p.imagen_url' de la consulta.
   const sql = `
     SELECT 
       c.id_producto,
       c.cantidad,
       p.nombre,
       p.precio,
-      p.imagen_url  -- CAMBIA ESTO si tu columna de imagen se llama diferente
+      p.descripcion
     FROM carrito c
     JOIN productos p ON c.id_producto = p.id_producto
     WHERE c.id_usuario = ?
@@ -242,7 +240,71 @@ app.post('/carrito/agregar', (req, res) => {
 });
 
 /**
- * 3. VACIAR el carrito de un usuario
+ * 3. ACTUALIZAR cantidad de un producto en el carrito
+ */
+app.put('/carrito/actualizar', (req, res) => {
+  const { id_usuario, id_producto, cantidad } = req.body;
+
+  if (!id_usuario || !id_producto || cantidad === undefined) {
+    return res.status(400).json({ error: 'Faltan datos (usuario, producto, cantidad)' });
+  }
+
+  const sql = 'UPDATE carrito SET cantidad = ? WHERE id_usuario = ? AND id_producto = ?';
+
+  db.getConnection((err, connection) => {
+    if (err) {
+      console.error('❌ Error al obtener conexión:', err);
+      return res.status(500).json({ error: 'Error de conexión' });
+    }
+
+    connection.query(sql, [cantidad, id_usuario, id_producto], (err, result) => {
+      connection.release();
+      if (err) {
+        console.error('❌ Error al actualizar carrito:', err);
+        return res.status(500).json({ error: 'Error al actualizar' });
+      }
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Producto no encontrado en el carrito' });
+      }
+      res.json({ message: 'Cantidad actualizada exitosamente' });
+    });
+  });
+});
+
+/**
+ * 4. ELIMINAR un producto específico del carrito
+ */
+app.delete('/carrito/eliminar', (req, res) => {
+  const { id_usuario, id_producto } = req.body;
+
+  if (!id_usuario || !id_producto) {
+    return res.status(400).json({ error: 'Faltan datos (usuario, producto)' });
+  }
+
+  const sql = 'DELETE FROM carrito WHERE id_usuario = ? AND id_producto = ?';
+
+  db.getConnection((err, connection) => {
+    if (err) {
+      console.error('❌ Error al obtener conexión:', err);
+      return res.status(500).json({ error: 'Error de conexión' });
+    }
+
+    connection.query(sql, [id_usuario, id_producto], (err, result) => {
+      connection.release();
+      if (err) {
+        console.error('❌ Error al eliminar del carrito:', err);
+        return res.status(500).json({ error: 'Error al eliminar' });
+      }
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Producto no encontrado en el carrito' });
+      }
+      res.json({ message: 'Producto eliminado del carrito' });
+    });
+  });
+});
+
+/**
+ * 5. VACIAR el carrito de un usuario
  */
 app.post('/carrito/vaciar', (req, res) => {
   const { id_usuario } = req.body;
@@ -266,6 +328,29 @@ app.post('/carrito/vaciar', (req, res) => {
         return res.status(500).json({ error: 'Error al vaciar' });
       }
       res.json({ message: 'Carrito vaciado exitosamente' });
+    });
+  });
+});
+
+/**
+ * 6. OBTENER todos los productos (para mapear nombres a IDs)
+ */
+app.get('/productos', (req, res) => {
+  const sql = 'SELECT id_producto, nombre, precio, descripcion FROM productos';
+
+  db.getConnection((err, connection) => {
+    if (err) {
+      console.error('❌ Error al obtener conexión:', err);
+      return res.status(500).json({ error: 'Error de conexión' });
+    }
+
+    connection.query(sql, [], (err, results) => {
+      connection.release();
+      if (err) {
+        console.error('❌ Error en la consulta GET productos:', err);
+        return res.status(500).json({ error: 'Error interno' });
+      }
+      res.json(results);
     });
   });
 });
