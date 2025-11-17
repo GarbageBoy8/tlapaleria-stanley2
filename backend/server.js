@@ -12,10 +12,11 @@ const app = express();
 // ✅ Configuración de CORS para permitir tu frontend de Vercel
 app.use(cors({
   origin: [
-    'https://tlapaleria-stanley2.vercel.app', // dominio desplegado en Vercel
-    'http://localhost:3000', // opcional: para pruebas locales
-    'http://127.0.0.1:8080',                 // Frontend local
-    'http://localhost:8080'              // Alternativa local
+    'https://tlapaleria-stanley.vercel.app',  // dominio principal en Vercel
+    'https://tlapaleria-stanley2.vercel.app', // dominio alternativo en Vercel
+    'http://localhost:3000',                   // opcional: para pruebas locales
+    'http://127.0.0.1:8080',                   // Frontend local
+    'http://localhost:8080'                   // Alternativa local
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
