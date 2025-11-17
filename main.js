@@ -23,3 +23,7 @@ window.addEventListener('resize', () => {
 
 // ejecutar cada 3 segundos
 setInterval(moveSlider, intervalTime);
+
+
+
+
