@@ -367,3 +367,10 @@
                 overflow-x: auto;
             }
         }
+
+
+        .titulo{
+            display: flex;
+            justify-content: center;
+            
+        }
