@@ -44,7 +44,7 @@ body {
     background-color: var(--icon-color); 
     color: white; 
     border: none; 
-    border-radius: 50%; 
+    border-radius: 50px; 
     font-weight: bold; 
     cursor: pointer;
 }
