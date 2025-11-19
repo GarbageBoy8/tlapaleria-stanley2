@@ -47,22 +47,7 @@
           alert("Por favor completa todos los campos.");
           return;
         }
-
-        try {
-          // Petición al Backend
-          const response = await fetch(`${API_BASE_URL}/verify`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            // ❌ ERROR: Mostrar mensaje del servidor
-            alert("❌ " + (result.error || "Usuario o contraseña incorrectos"));
-        }
-
-        } catch (error) {
-        console.error("Error de conexión:", error);
-        alert("❌ Error al conectar con el servidor. Revisa tu conexión o que el backend esté encendido.");
-      }
-    });
-    });
+      });
   </script>
 </body>
 
