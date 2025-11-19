@@ -1,57 +1,25 @@
-
 // Navegación entre secciones
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const navButtons = document.querySelectorAll('.nav-btn');
     const sections = document.querySelectorAll('.content-section');
-    
+
     // Configurar evento para cada botón de navegación
     navButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const targetSection = this.getAttribute('data-section');
-            
+
             // Remover clase active de todos los botones y secciones
             navButtons.forEach(btn => btn.classList.remove('active'));
             sections.forEach(section => section.classList.remove('active'));
-            
+
             // Agregar clase active al botón clickeado y sección correspondiente
             this.classList.add('active');
             document.getElementById(`${targetSection}-section`).classList.add('active');
         });
     });
-    
-```javascript
 
-// Navegación entre secciones
-document.addEventListener('DOMContentLoaded', function() {
-    const navButtons = document.querySelectorAll('.nav-btn');
-    const sections = document.querySelectorAll('.content-section');
-    
-    // Configurar evento para cada botón de navegación
-    navButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const targetSection = this.getAttribute('data-section');
-            
-            // Remover clase active de todos los botones y secciones
-            navButtons.forEach(btn => btn.classList.remove('active'));
-            sections.forEach(section => section.classList.remove('active'));
-            
-            // Agregar clase active al botón clickeado y sección correspondiente
-            this.classList.add('active');
-            document.getElementById(`${targetSection}-section`).classList.add('active');
-        });
-    });
-    
-    // Simular datos del usuario (puedes reemplazar con datos reales)
-    const displayName = document.getElementById('display-name');
-    displayName.textContent = 'Usuario'; // Puedes cambiar esto por el nombre real
-});
-
-
-// Espera a que todo el contenido HTML se haya cargado
-document.addEventListener("DOMContentLoaded", function() {
-    
     // --- Lógica de Usuario Real y Logout ---
-    
+
     // 1. Obtener usuario del localStorage
     const usuarioGuardado = localStorage.getItem('usuario');
     let usuarioActual = null;
@@ -73,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // 3. Lógica del botón de Cerrar Sesión
     const btnLogout = document.getElementById('btn-logout');
     if (btnLogout) {
-        btnLogout.addEventListener('click', function() {
+        btnLogout.addEventListener('click', function () {
             // Borrar usuario del localStorage
             localStorage.removeItem('usuario');
             // Redirigir al inicio
@@ -81,12 +49,11 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    // --- Lógica para el icono de inicial (opcional si se usa en esta página) ---
-    const userIcon = document.getElementById("profilePageIcon"); // Usando el ID correcto de esta página
+    // --- Lógica para el icono de inicial (opcional) ---
+    const userIcon = document.getElementById("profilePageIcon");
     if (userIcon) {
         // Si quieres mostrar la inicial en el círculo grande
-        // userIcon.querySelector('img').style.display = 'none'; // Ocultar imagen si prefieres inicial
+        // userIcon.querySelector('img').style.display = 'none'; 
         // userIcon.textContent = usuarioActual.nombre.charAt(0).toUpperCase();
     }
 });
-```
