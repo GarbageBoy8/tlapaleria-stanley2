@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -6,10 +7,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../carrito.css">
+    <!-- Font Awesome para el ícono del carrito -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 
 <body>
     <div class="container">
+        <!-- Icono del carrito en la esquina superior derecha del contenedor -->
+        <div style="position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer;">
+            <div class="container-user" style="display: flex; align-items: center; gap: 10px;">
+                <i class="fa-solid fa-basket-shopping" style="color: #333;"></i>
+                <div class="content-shopping-cart" style="display: flex; flex-direction: column; font-size: 0.8rem;">
+                    <span class="text">Carrito</span>
+                    <span class="number">(0)</span>
+                </div>
+            </div>
+        </div>
+
         <div class="profile-initial-icon" id="profilePageIcon">
             <img src="IMG/users-svgrepo-com.svg" alt="">
         </div>
@@ -77,6 +92,20 @@
     </div>
 
     <script src="app.js"></script>
+
+    <!-- Modal del Carrito -->
+    <div id="modal-carrito" class="modal-overlay">
+        <div class="modal-contenido">
+            <span id="btn-cerrar-modal" class="modal-cerrar">&times;</span>
+            <h2>Tu Carrito</h2>
+            <div id="carrito-items-container"></div>
+        </div>
+    </div>
+    <div id="toast-notificacion" class="toast"></div>
+
+    <!-- Scripts del carrito -->
+    <script src="../config.js"></script>
+    <script src="../carrito.js"></script>
 </body>
 
 </html>
