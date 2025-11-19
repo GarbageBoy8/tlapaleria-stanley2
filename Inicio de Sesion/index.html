@@ -27,86 +27,57 @@
       <input type="submit" value="Iniciar sesión">
       <div class="registrarse">
         ¿No tienes una cuenta? <a href="../Creacion de cuenta/index.html">Crear cuenta</a>
-        <!DOCTYPE html>
-        <html lang="es">
+      </div>
+    </form>
+  </div>
 
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>STANLEY - Inicio de Sesión</title>
-          <link rel="stylesheet" href="style.css">
-          <link rel="icon" type="image/png" href="img/forlogin - copia.png">
-        </head>
+  <script src="../config.js"></script>
 
-        <body>
-          <div class="formulario">
-            <img src="img/forlogin.png" alt="Logo" class="logo">
-            <h1>Iniciar sesión</h1>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("loginForm");
 
-            <form id="loginForm">
-              <div class="username">
-                <input type="text" id="usuario" name="usuario" required>
-                <label>Nombre de usuario</label>
-              </div>
-              <div class="username">
-                <input type="password" id="password" name="password" required>
-                <label>Contraseña</label>
-              </div>
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-              <input type="submit" value="Iniciar sesión">
-              <div class="registrarse">
-                ¿No tienes una cuenta? <a href="../Creacion de cuenta/index.html">Crear cuenta</a>
-              </div>
-            </form>
-          </div>
+        const usuario = document.getElementById("usuario").value.trim();
+        const password = document.getElementById("password").value.trim();
 
-          <script src="../config.js"></script>
+        if (!usuario || !password) {
+          alert("Por favor completa todos los campos.");
+          return;
+        }
 
-          <script>
-            document.addEventListener("DOMContentLoaded", () => {
-              const form = document.getElementById("loginForm");
+        try {
+          // Petición al Backend
+          const response = await fetch(`${API_BASE_URL}/verify`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ usuario, password })
+          });
 
-              form.addEventListener("submit", async (e) => {
-                e.preventDefault();
+          const result = await response.json();
 
-                const usuario = document.getElementById("usuario").value.trim();
-                const password = document.getElementById("password").value.trim();
+          if (response.ok) {
+            // ✅ ÉXITO: Guardar sesión
+            localStorage.setItem('usuario', JSON.stringify(result.usuario));
 
-                if (!usuario || !password) {
-                  alert("Por favor completa todos los campos.");
-                  return;
-                }
+            alert("✅ ¡Bienvenido " + result.usuario.nombre + "!");
 
-                try {
-                  // Petición al Backend
-                  const response = await fetch(`${API_BASE_URL}/verify`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ usuario, password })
-                  });
+            // Redirigir al panel de usuario (Dashboard)
+            window.location.href = "../user/index.html";
+          } else {
+            // ❌ ERROR: Mostrar mensaje del servidor
+            alert("❌ " + (result.error || "Usuario o contraseña incorrectos"));
+          }
 
-                  const result = await response.json();
+        } catch (error) {
+          console.error("Error de conexión:", error);
+          alert("❌ Error al conectar con el servidor. Revisa tu conexión o que el backend esté encendido.");
+        }
+      });
+    });
+  </script>
+</body>
 
-                  if (response.ok) {
-                    // ✅ ÉXITO: Guardar sesión
-                    localStorage.setItem('usuario', JSON.stringify(result.usuario));
-
-                    alert("✅ ¡Bienvenido " + result.usuario.nombre + "!");
-
-                    // Redirigir al panel de usuario (Dashboard)
-                    window.location.href = "../user/index.html";
-                  } else {
-                    // ❌ ERROR: Mostrar mensaje del servidor
-                    alert("❌ " + (result.error || "Usuario o contraseña incorrectos"));
-                  }
-
-                } catch (error) {
-                  console.error("Error de conexión:", error);
-                  alert("❌ Error al conectar con el servidor. Revisa tu conexión o que el backend esté encendido.");
-                }
-              });
-            });
-          </script>
-        </body>
-
-        </html>
+</html>
