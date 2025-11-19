@@ -148,13 +148,13 @@ app.post('/verify', (req, res) => {
 
       if (results.length > 0) {
         console.log(`✅ Inicio de sesión exitoso: ${usuario}`);
-        
+
         // ¡CAMBIO CLAVE! Enviamos el objeto de usuario al frontend
-        res.json({ 
-            message: '✅ Inicio de sesión exitoso',
-            usuario: results[0] // Contiene { id, nombre, usuario, correo }
+        res.json({
+          message: '✅ Inicio de sesión exitoso',
+          usuario: results[0] // Contiene { id, nombre, usuario, correo }
         });
-      
+
       } else {
         console.log('❌ Usuario o contraseña incorrectos');
         res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
@@ -174,7 +174,7 @@ app.post('/verify', (req, res) => {
  */
 app.get('/carrito/:id_usuario', (req, res) => {
   const { id_usuario } = req.params;
-  
+
   const sql = `
     SELECT 
       c.id_producto,
@@ -186,13 +186,13 @@ app.get('/carrito/:id_usuario', (req, res) => {
     JOIN productos p ON c.id_producto = p.id_producto
     WHERE c.id_usuario = ?
   `;
-  
+
   db.getConnection((err, connection) => {
     if (err) {
       console.error('❌ Error al obtener conexión:', err);
       return res.status(500).json({ error: 'Error de conexión' });
     }
-    
+
     connection.query(sql, [id_usuario], (err, results) => {
       connection.release();
       if (err) {
@@ -357,8 +357,143 @@ app.get('/productos', (req, res) => {
 
 
 // ================================================================
-// RUTAS DE VERIFICACIÓN (SIN CAMBIOS)
+// 🛍️ RUTAS DE COMPRA Y PEDIDOS (NUEVAS)
 // ================================================================
+
+/**
+ * 7. PROCESAR COMPRA (POST /api/comprar)
+ * - Obtiene items del carrito
+ * - Calcula total
+ * - Crea pedido en tabla 'pedidos'
+ * - Mueve items a 'detalles_pedido'
+ * - Vacía el carrito
+ */
+app.post('/api/comprar', (req, res) => {
+  const { id_usuario } = req.body;
+
+  if (!id_usuario) {
+    return res.status(400).json({ error: 'Falta id_usuario' });
+  }
+
+  db.getConnection(async (err, connection) => {
+    if (err) {
+      console.error('❌ Error al obtener conexión:', err);
+      return res.status(500).json({ error: 'Error de conexión' });
+    }
+
+    try {
+      // 1. Iniciar transacción
+      await connection.promise().beginTransaction();
+
+      // 2. Obtener items del carrito con precios actuales
+      const [items] = await connection.promise().query(`
+        SELECT c.id_producto, c.cantidad, p.precio 
+        FROM carrito c 
+        JOIN productos p ON c.id_producto = p.id_producto 
+        WHERE c.id_usuario = ?
+      `, [id_usuario]);
+
+      if (items.length === 0) {
+        connection.release();
+        return res.status(400).json({ error: 'El carrito está vacío' });
+      }
+
+      // 3. Calcular total
+      const total = items.reduce((sum, item) => sum + (item.cantidad * item.precio), 0);
+
+      // 4. Crear pedido
+      const [pedidoResult] = await connection.promise().query(`
+        INSERT INTO pedidos (id_usuario, total) VALUES (?, ?)
+      `, [id_usuario, total]);
+
+      const id_pedido = pedidoResult.insertId;
+
+      // 5. Insertar detalles
+      const detallesValues = items.map(item => [id_pedido, item.id_producto, item.cantidad, item.precio]);
+      await connection.promise().query(`
+        INSERT INTO detalles_pedido (id_pedido, id_producto, cantidad, precio_unitario) 
+        VALUES ?
+      `, [detallesValues]);
+
+      // 6. Vaciar carrito
+      await connection.promise().query('DELETE FROM carrito WHERE id_usuario = ?', [id_usuario]);
+
+      // 7. Confirmar transacción
+      await connection.promise().commit();
+      connection.release();
+
+      console.log(`✅ Compra exitosa para usuario ${id_usuario}. Pedido #${id_pedido}`);
+      res.status(201).json({ message: 'Compra realizada con éxito', id_pedido });
+
+    } catch (error) {
+      // Revertir cambios si algo falla
+      await connection.promise().rollback();
+      connection.release();
+      console.error('❌ Error en transacción de compra:', error);
+      res.status(500).json({ error: 'Error al procesar la compra' });
+    }
+  });
+});
+
+/**
+ * 8. OBTENER HISTORIAL DE PEDIDOS (GET /api/pedidos/:id_usuario)
+ * - Retorna los pedidos y sus productos agrupados
+ */
+app.get('/api/pedidos/:id_usuario', (req, res) => {
+  const { id_usuario } = req.params;
+
+  const sql = `
+    SELECT 
+      p.id_pedido, 
+      p.fecha, 
+      p.total,
+      dp.cantidad, 
+      dp.precio_unitario, 
+      prod.nombre as nombre_producto
+    FROM pedidos p
+    JOIN detalles_pedido dp ON p.id_pedido = dp.id_pedido
+    JOIN productos prod ON dp.id_producto = prod.id_producto
+    WHERE p.id_usuario = ?
+    ORDER BY p.fecha DESC
+  `;
+
+  db.getConnection((err, connection) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error de conexión' });
+    }
+
+    connection.query(sql, [id_usuario], (err, results) => {
+      connection.release();
+      if (err) {
+        console.error('❌ Error al obtener pedidos:', err);
+        return res.status(500).json({ error: 'Error al obtener historial' });
+      }
+
+      // Agrupar resultados por pedido
+      const pedidosMap = new Map();
+
+      results.forEach(row => {
+        if (!pedidosMap.has(row.id_pedido)) {
+          pedidosMap.set(row.id_pedido, {
+            id_pedido: row.id_pedido,
+            fecha: row.fecha,
+            total: row.total,
+            productos: []
+          });
+        }
+        pedidosMap.get(row.id_pedido).productos.push({
+          nombre: row.nombre_producto,
+          cantidad: row.cantidad,
+          precio: row.precio_unitario
+        });
+      });
+
+      const historial = Array.from(pedidosMap.values());
+      res.json(historial);
+    });
+  });
+});
+
 
 // 🌐 Ruta raíz para verificar el estado del servidor
 app.get('/', (req, res) => {
