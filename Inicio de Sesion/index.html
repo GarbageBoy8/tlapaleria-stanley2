@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/png" href="img/forlogin - copia.png">
 </head>
+
 <body>
   <div class="formulario">
     <img src="img/forlogin.png" alt="Logo" class="logo">
@@ -51,31 +53,17 @@
           const response = await fetch(`${API_BASE_URL}/verify`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ usuario, password })
-          });
-
-          const result = await response.json();
-
-          if (response.ok) {
-            // ✅ ÉXITO: Guardar sesión
-            // Usamos 'usuarioLogueado' para ser consistentes con el siguiente paso
-            localStorage.setItem('usuarioLogueado', JSON.stringify(result.usuario));
-            
-            alert("✅ ¡Bienvenido " + result.usuario.nombre + "!");
-            
-            // Redirigir al panel de usuario (Dashboard)
-            window.location.href = "../user/index.html";
-          } else {
             // ❌ ERROR: Mostrar mensaje del servidor
             alert("❌ " + (result.error || "Usuario o contraseña incorrectos"));
-          }
+        }
 
         } catch (error) {
-          console.error("Error de conexión:", error);
-          alert("❌ Error al conectar con el servidor. Revisa tu conexión o que el backend esté encendido.");
-        }
-      });
+        console.error("Error de conexión:", error);
+        alert("❌ Error al conectar con el servidor. Revisa tu conexión o que el backend esté encendido.");
+      }
+    });
     });
   </script>
 </body>
+
 </html>
