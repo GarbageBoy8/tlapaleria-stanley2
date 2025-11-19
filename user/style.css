@@ -27,7 +27,7 @@ body {
     display: flex;
     gap: 10px;
     margin-bottom: 15px;
-    justify-content: center;
+    justify-content: flex-end;
 }
 /*
 .btn-user a {
