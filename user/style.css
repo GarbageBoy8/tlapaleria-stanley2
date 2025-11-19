@@ -29,7 +29,7 @@ body {
     margin-bottom: 15px;
     justify-content: center;
 }
-
+/*
 .btn-user a {
     padding: 10px 20px;
     background-color: var(--icon-color);
@@ -37,7 +37,7 @@ body {
     text-decoration: none;
     border-radius: 5px;
     font-weight: bold;
-}
+}*/
 
 .btn-user button {
     padding: 10px 20px; 
