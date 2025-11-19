@@ -14,6 +14,79 @@ body {
     padding: 20px;
 }
 
+
+/* ********************************** */
+/*               HEADER               */
+/* ********************************** */
+.container-hero {
+    background-color: var(--background-color);
+}
+
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 0;
+}
+
+.customer-support {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.customer-support i {
+    font-size: 3.3rem;
+    color: var(--icon-color);
+}
+
+.content-customer-support {
+    display: flex;
+    flex-direction: column;
+}
+
+.container-logo {
+    display: flex;
+    height: 5rem;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.container-logo img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+    height: 8rem;
+    overflow: hidden;
+    mix-blend-mode: multiply;
+    background-color: transparent;
+}
+
+.container-user {
+    display: flex;
+    gap: 1rem;
+    cursor: pointer;
+}
+
+.container-user .fa-user {
+    font-size: 3rem;
+    color: var(--icon-color);
+    padding-right: 2.5rem;
+    border-right: 1px solid #e2e2e2;
+}
+
+.container-user .fa-basket-shopping {
+    font-size: 3rem;
+    color: var(--icon-color);
+    padding-left: 1rem;
+}
+
+.content-shopping-cart {
+    display: flex;
+    flex-direction: column;
+}
+
+
 .container {
     max-width: 800px;
     margin: 20px auto;
