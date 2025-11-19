@@ -62,29 +62,6 @@ body {
     background-color: transparent;
 }
 
-.container-user {
-    display: flex;
-    gap: 1rem;
-    cursor: pointer;
-}
-
-.container-user .fa-user {
-    font-size: 3rem;
-    color: var(--icon-color);
-    padding-right: 2.5rem;
-    border-right: 1px solid #e2e2e2;
-}
-
-.container-user .fa-basket-shopping {
-    font-size: 3rem;
-    color: var(--icon-color);
-    padding-left: 1rem;
-}
-
-.content-shopping-cart {
-    display: flex;
-    flex-direction: column;
-}
 
 
 .container {
