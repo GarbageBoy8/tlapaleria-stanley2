@@ -27,28 +27,86 @@
       <input type="submit" value="Iniciar sesión">
       <div class="registrarse">
         ¿No tienes una cuenta? <a href="../Creacion de cuenta/index.html">Crear cuenta</a>
-      </div>
-    </form>
-  </div>
+        <!DOCTYPE html>
+        <html lang="es">
 
-  <script src="../config.js"></script>
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>STANLEY - Inicio de Sesión</title>
+          <link rel="stylesheet" href="style.css">
+          <link rel="icon" type="image/png" href="img/forlogin - copia.png">
+        </head>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const form = document.getElementById("loginForm");
+        <body>
+          <div class="formulario">
+            <img src="img/forlogin.png" alt="Logo" class="logo">
+            <h1>Iniciar sesión</h1>
 
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+            <form id="loginForm">
+              <div class="username">
+                <input type="text" id="usuario" name="usuario" required>
+                <label>Nombre de usuario</label>
+              </div>
+              <div class="username">
+                <input type="password" id="password" name="password" required>
+                <label>Contraseña</label>
+              </div>
 
-        const usuario = document.getElementById("usuario").value.trim();
-        const password = document.getElementById("password").value.trim();
+              <input type="submit" value="Iniciar sesión">
+              <div class="registrarse">
+                ¿No tienes una cuenta? <a href="../Creacion de cuenta/index.html">Crear cuenta</a>
+              </div>
+            </form>
+          </div>
 
-        if (!usuario || !password) {
-          alert("Por favor completa todos los campos.");
-          return;
-        }
-      });
-  </script>
-</body>
+          <script src="../config.js"></script>
 
-</html>
+          <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              const form = document.getElementById("loginForm");
+
+              form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                const usuario = document.getElementById("usuario").value.trim();
+                const password = document.getElementById("password").value.trim();
+
+                if (!usuario || !password) {
+                  alert("Por favor completa todos los campos.");
+                  return;
+                }
+
+                try {
+                  // Petición al Backend
+                  const response = await fetch(`${API_BASE_URL}/verify`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ usuario, password })
+                  });
+
+                  const result = await response.json();
+
+                  if (response.ok) {
+                    // ✅ ÉXITO: Guardar sesión
+                    localStorage.setItem('usuario', JSON.stringify(result.usuario));
+
+                    alert("✅ ¡Bienvenido " + result.usuario.nombre + "!");
+
+                    // Redirigir al panel de usuario (Dashboard)
+                    window.location.href = "../user/index.html";
+                  } else {
+                    // ❌ ERROR: Mostrar mensaje del servidor
+                    alert("❌ " + (result.error || "Usuario o contraseña incorrectos"));
+                  }
+
+                } catch (error) {
+                  console.error("Error de conexión:", error);
+                  alert("❌ Error al conectar con el servidor. Revisa tu conexión o que el backend esté encendido.");
+                }
+              });
+            });
+          </script>
+        </body>
+
+        </html>
