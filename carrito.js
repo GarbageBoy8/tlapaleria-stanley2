@@ -299,9 +299,55 @@ document.addEventListener('DOMContentLoaded', () => {
         const btnLimpiar = document.createElement('button');
         btnLimpiar.id = 'btn-limpiar-carrito';
         btnLimpiar.innerText = 'Vaciar Carrito';
-        btnLimpiar.style.cssText = 'background-color: #d9534f; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; margin-top: 15px; width: 100%;';
+        btnLimpiar.style.cssText = 'background-color: #d9534f; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; margin-top: 15px; width: 48%; margin-right: 4%;';
         btnLimpiar.addEventListener('click', vaciarCarrito);
-        contenedorItems.appendChild(btnLimpiar);
+
+        // Añadir botón de "Comprar Carrito"
+        const btnComprar = document.createElement('button');
+        btnComprar.id = 'btn-comprar-carrito';
+        btnComprar.innerText = 'Comprar Carrito';
+        btnComprar.style.cssText = 'background-color: #28a745; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; margin-top: 15px; width: 48%;';
+        btnComprar.addEventListener('click', comprarCarrito);
+
+        const containerBotones = document.createElement('div');
+        containerBotones.style.display = 'flex';
+        containerBotones.appendChild(btnLimpiar);
+        containerBotones.appendChild(btnComprar);
+        contenedorItems.appendChild(containerBotones);
+    }
+
+    /**
+     * Procesa la compra del carrito
+     */
+    async function comprarCarrito() {
+        if (!usuarioActual) return;
+
+        if (!confirm('¿Confirmar compra de todos los productos del carrito?')) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/comprar`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id_usuario: usuarioActual.id
+                })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                mostrarToast('🎉 ¡Compra realizada con éxito!');
+                alert('¡Gracias por tu compra! Tu pedido ha sido registrado.');
+                cargarCarritoUsuario();
+            } else {
+                mostrarToast('❌ ' + (result.error || 'Error al procesar la compra'));
+            }
+        } catch (error) {
+            console.error('Error al procesar compra:', error);
+            mostrarToast('❌ Error de conexión');
+        }
     }
 
     /**

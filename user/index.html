@@ -57,8 +57,6 @@
         </div>
         <h1>Hola, <span id="display-name">...</span></h1>
 
-       
-
         <!-- Barra de Navegación -->
         <nav class="profile-nav">
             <button class="nav-btn active" data-section="purchases">Mis Compras</button>
@@ -70,17 +68,8 @@
         <!-- Sección de Compras (visible por defecto) -->
         <section class="content-section active" id="purchases-section">
             <h2>Mis Compras</h2>
-            <ul class="purchase-list">
-                <li>
-                    <span class="item-name">Producto A - Talla M</span>
-                    <span class="item-date">Fecha: 10/11/2025</span>
-                    <span class="item-price">$49.99</span>
-                </li>
-                <li>
-                    <span class="item-name">Libro "HTML y CSS"</span>
-                    <span class="item-date">Fecha: 05/11/2025</span>
-                    <span class="item-price">$25.50</span>
-                </li>
+            <ul class="purchase-list" id="lista-compras">
+                <p>Cargando tus compras...</p>
             </ul>
         </section>
 
@@ -112,7 +101,7 @@
 
     <script src="app.js"></script>
 
-    <!-- Modal del Carrito -->
+
     <div id="modal-carrito" class="modal-overlay">
         <div class="modal-contenido">
             <span id="btn-cerrar-modal" class="modal-cerrar">&times;</span>
@@ -123,11 +112,11 @@
     <div id="toast-notificacion" class="toast"></div>
 
 
-     <!-- Botones de Acción -->
-        <div class="btn-user">
-            <button><a href="../index.html"> Ir al Inicio</a></button>
-            <button id="btn-logout">Cerrar Sesión</button>
-        </div>
+    <!-- Botones de Acción -->
+    <div class="btn-user">
+        <button><a href="../index.html"> Ir al Inicio</a></button>
+        <button id="btn-logout">Cerrar Sesión</button>
+    </div>
     <!-- Scripts del carrito -->
     <script src="../config.js"></script>
     <script src="../carrito.js"></script>
