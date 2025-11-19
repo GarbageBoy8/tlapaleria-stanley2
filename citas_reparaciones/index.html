@@ -279,12 +279,224 @@
 
 		<div class="footer-copyright">
 			&copy; 2025 Tlapaleria Stanley. Desarrollado por
-			<a href="#">CHUPPS</a> | <a href="#">Política de privacidad</a>.
+			<div class="form-group">
+				<label for="hora-cita" class="hora-label">Selecciona la hora:</label>
+				<input type="time" id="hora-cita" name="hora-cita" required>
+			</div>
 		</div>
-	</footer>
+
+		<textarea name="mensaje" rows="6" placeholder="Mensaje" required></textarea>
+
+		<button type="submit" class="btn-info">Descargar cita en PDF</button>
+		</form>
+		</div>
+		</div>
+		</section>
 
 
-	<script src="https://kit.fontawesome.com/44e03b64d7.js" crossorigin="anonymous"></script>
+		<!-- script para generar pdf -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+		<script>
+			// --- Limitar caracteres permitidos en tiempo real ---
+			document.getElementById("nombre").addEventListener("input", function () {
+				this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, ""); // solo letras y espacios
+			});
+
+			document.getElementById("telefono").addEventListener("input", function () {
+				this.value = this.value.replace(/[^0-9]/g, ""); // solo números
+			});
+
+			// --- Generador de folio ---
+			function generarFolio() {
+				const f = new Date();
+				const random = Math.random().toString(36).substring(2, 6).toUpperCase();
+				return `CIT-${f.getFullYear().toString().slice(-2)}${String(f.getMonth() + 1).padStart(2, '0')}${String(f.getDate()).padStart(2, '0')}-${random}`;
+			}
+
+			// --- Validar antes de generar PDF ---
+			function validarYGenerarPDF() {
+				const nombre = document.getElementById("nombre").value.trim();
+				const telefono = document.getElementById("telefono").value.trim();
+				const correo = document.getElementById("correo").value.trim();
+				const asunto = document.getElementById("asunto").value.trim();
+				const fecha = document.getElementById("fecha-cita").value.trim();
+				const hora = document.getElementById("hora-cita").value.trim();
+				const mensaje = document.querySelector('textarea[name="mensaje"]').value.trim();
+
+				if (nombre === "" || telefono === "" || correo === "" || asunto === "" || fecha === "" || hora === "" || mensaje === "") {
+					alert("⚠️ Por favor completa todos los campos.");
+					return;
+				}
+
+				if (telefono.length < 7 || telefono.length > 15) {
+					alert("❌ El teléfono debe tener entre 7 y 15 dígitos.");
+					return;
+				}
+
+				genPDF();
+			}
+
+			// --- Generar PDF ---
+			async function genPDF() {
+				const { jsPDF } = window.jspdf;
+				const doc = new jsPDF();
+
+				const logoUrl = "./img/LogoS.jpg";
+				const img = await loadImageAsBase64(logoUrl);
+				doc.addImage(img, "PNG", 150, 10, 40, 30);
+
+				const folio = generarFolio();
+				doc.setFontSize(18);
+				doc.text("Cita de Reparación", 20, 25);
+				doc.setFontSize(12);
+				doc.text("Folio: " + folio, 20, 40);
+
+				let y = 60;
+				const datos = [
+					{ label: "Nombre:", value: document.getElementById("nombre").value },
+					{ label: "Teléfono:", value: document.getElementById("telefono").value },
+					{ label: "Correo Electrónico:", value: document.getElementById("correo").value },
+					{ label: "Asunto:", value: document.getElementById("asunto").value },
+					{ label: "Fecha de Cita:", value: document.getElementById("fecha-cita").value },
+					{ label: "Hora de Cita:", value: document.getElementById("hora-cita").value },
+					{ label: "Mensaje:", value: document.querySelector('textarea[name="mensaje"]').value }
+				];
+
+				datos.forEach(item => {
+					doc.text(`${item.label} ${item.value}`, 20, y);
+					y += 15;
+				});
+
+				const fechaActual = new Date().toLocaleString('es-MX');
+				doc.setFontSize(10);
+				doc.text(`Generado el: ${fechaActual}`, 20, 280);
+
+				doc.save(`cita-reparacion.pdf`);
+			}
+
+			// --- Convertir imagen URL a base64 ---
+			function loadImageAsBase64(url) {
+				return new Promise((resolve, reject) => {
+					const xhr = new XMLHttpRequest();
+					xhr.onload = () => {
+						const reader = new FileReader();
+						reader.onloadend = () => resolve(reader.result);
+						reader.readAsDataURL(xhr.response);
+					};
+					xhr.onerror = reject;
+					xhr.open("GET", url);
+					xhr.responseType = "blob";
+					xhr.send();
+				});
+			}
+		</script>
+
+
+
+
+		<!-- location -->
+		<section class="location">
+			<div class="content-location">
+				<h2>Nuestra Ubicación</h2>
+				<p>Estamos ubicados en el corazón de la ciudad, en la Calle Principal #123, Ciudad, País. Nuestra tienda
+					es
+					fácilmente accesible y cuenta con un amplio estacionamiento para la comodidad de nuestros clientes.
+				</p>
+				<div class="mapa">
+					<iframe
+						src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3763.632263486257!2d-99.1332096845932!3d19.432607986886736!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1ff4c8b5e5b7b%3A0x4a4b8b8b8b8b8b8b!2sCalle%20Principal%20123%2C%20Ciudad%2C%20Pa%C3%ADs!5e0!3m2!1ses-419!2smx!4v1616161616161!5m2!1ses-419!2smx"
+						width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+				</div>
+			</div>
+		</section>
+
+		<!-- FOOTER -->
+		<footer class="footer">
+			<div class="footer-contenedor">
+				<div class="footer-col-info">
+					<img class="footer-logo" src="/img/forlogin.png" />
+					<p class="footer-descripcion">
+						En Parque Ecoturístico Tlalmanalco, creemos que la diversión y el
+						respeto por la naturaleza pueden ir de la mano.
+					</p>
+				</div>
+
+				<div class="footer-col-nav">
+					<h4 class="footer-titulo">Navegación</h4>
+					<nav class="footer-nav">
+						<ul>
+							<li><a href="../index.html">INICIO</a></li>
+							<li><a href="../Nosotros/index.html">NOSOTROS</a></li>
+							<li><a href="../catlogo/index.html">NUESTROS PRODUCTOS</a></li>
+							<li><a href="index.html">REPARACIONES</a></li>
+							<li><a href="../contacto/index.html">CONTACTO</a></li>
+						</ul>
+					</nav>
+				</div>
+
+				<div class="footer-col-nav footer-col-exp">
+					<h4 class="footer-titulo">Categorias</h4>
+					<nav class="footer-nav">
+						<ul>
+							<li><a href="../catlogo/index.html">DESARMADORES</a></li>
+							<li><a href="../catlogo/index.html">HERRAMIENTAS DE CORTE</a></li>
+							<li><a href="../catlogo/index.html">BOMBAS</a></li>
+							<li><a href="../catlogo/index.html">TORNILLOS</a></li>
+							<li><a href="../catlogo/index.html">MARTILLOS</a></li>
+							<li><a href="../catlogo/index.html">MAQUINARIA</a></li>
+						</ul>
+					</nav>
+				</div>
+
+				<div class="footer-col-contacto">
+					<h4 class="footer-titulo">Contacto</h4>
+
+					<div class="contacto-item">
+						<i>&#x260E;</i> <span>55 7211 7828</span>
+					</div>
+
+					<div class="contacto-item">
+						<i>&#x2709;</i> <span>stanley-tlapa@gmail.com</span>
+					</div>
+
+					<div class="contacto-item">
+						<i>&#x27A6;</i>
+						<span>
+							Caretera Federal México-Cuautla, 56700 Tlalmanalco de Velázquez,
+							Mex
+						</span>
+					</div>
+
+					<div class="social-icons">
+						<a href="#"><i class="fa-brands fa-square-whatsapp"></i></a>
+						<a href="#"><i class="fa-brands fa-facebook"></i></a>
+					</div>
+				</div>
+			</div>
+
+			<div class="footer-copyright">
+				&copy; 2025 Tlapaleria Stanley. Desarrollado por
+				<a href="#">CHUPPS</a> | <a href="#">Política de privacidad</a>.
+			</div>
+		</footer>
+
+
+		<script src="https://kit.fontawesome.com/44e03b64d7.js" crossorigin="anonymous"></script>
+
+		<!-- Modal del Carrito -->
+		<div id="modal-carrito" class="modal-overlay">
+			<div class="modal-contenido">
+				<span id="btn-cerrar-modal" class="modal-cerrar">&times;</span>
+				<h2>Tu Carrito</h2>
+				<div id="carrito-items-container"></div>
+			</div>
+		</div>
+		<div id="toast-notificacion" class="toast"></div>
+
+		<!-- Scripts del carrito -->
+		<script src="../config.js"></script>
+		<script src="../carrito.js"></script>
+
 </body>
 
 </html>

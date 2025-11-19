@@ -30,51 +30,52 @@
   </div>
 
   <script src="../config.js"></script>
+
   <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("loginForm");
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("loginForm");
 
-    form.addEventListener("submit", async e => {
-      e.preventDefault();
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-      const usuario = document.getElementById("usuario").value.trim();
-      const password = document.getElementById("password").value.trim();
+        const usuario = document.getElementById("usuario").value.trim();
+        const password = document.getElementById("password").value.trim();
 
-      if (!usuario || !password) {
-        alert("Por favor completa todos los campos.");
-        return;
-      }
-
-      try {
-        const response = await fetch(`${API_BASE_URL}/verify`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ usuario, password })
-        });
-
-        const result = await response.json();
-
-        if (response.ok && result.message) {
-          // Guardar datos del usuario en localStorage
-          if (result.usuario) {
-            localStorage.setItem('usuario', JSON.stringify(result.usuario));
-          }
-          
-          alert("✅ " + result.message);
-          form.reset();
-          setTimeout(() => {
-            // Redirigir a la página principal o al perfil del usuario
-            window.location.href = "../index.html";
-          }, 1000);
-        } else {
-          alert("❌ " + (result.error || "Usuario o contraseña incorrectos"));
+        if (!usuario || !password) {
+          alert("Por favor completa todos los campos.");
+          return;
         }
-      } catch (error) {
-        console.error("Error al conectar con el servidor:", error);
-        alert("❌ No se pudo conectar con el servidor. Verifica tu conexión.");
-      }
+
+        try {
+          // Petición al Backend
+          const response = await fetch(`${API_BASE_URL}/verify`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ usuario, password })
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            // ✅ ÉXITO: Guardar sesión
+            // Usamos 'usuarioLogueado' para ser consistentes con el siguiente paso
+            localStorage.setItem('usuarioLogueado', JSON.stringify(result.usuario));
+            
+            alert("✅ ¡Bienvenido " + result.usuario.nombre + "!");
+            
+            // Redirigir al panel de usuario (Dashboard)
+            window.location.href = "../user/index.html";
+          } else {
+            // ❌ ERROR: Mostrar mensaje del servidor
+            alert("❌ " + (result.error || "Usuario o contraseña incorrectos"));
+          }
+
+        } catch (error) {
+          console.error("Error de conexión:", error);
+          alert("❌ Error al conectar con el servidor. Revisa tu conexión o que el backend esté encendido.");
+        }
+      });
     });
-  });
   </script>
 </body>
 </html>
