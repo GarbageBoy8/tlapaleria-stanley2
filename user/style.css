@@ -49,6 +49,10 @@ body {
     cursor: pointer;
 }
 
+.btn-user button a{
+    color: white;
+}
+
 /* Icono de perfil */
 .profile-initial-icon {
     width: 80px;
