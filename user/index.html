@@ -2,45 +2,81 @@
 <html lang="es">
 
 <head>
-    <span class="item-name">Producto A - Talla M</span>
-    <span class="item-date">Fecha: 10/11/2025</span>
-    <span class="item-price">$49.99</span>
-    </li>
-    <li>
-        <span class="item-name">Libro "HTML y CSS"</span>
-        <span class="item-date">Fecha: 05/11/2025</span>
-        <span class="item-price">$25.50</span>
-    </li>
-    </ul>
-    </section>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 
-    <!-- Sección de Citas (oculta inicialmente) -->
-    <section class="content-section" id="appointments-section">
-        <h2>Mis Citas Anteriores</h2>
-        <ul class="appointments-list">
-            <li>
-                <span class="appointment-service">Corte de Cabello</span>
-                <span class="appointment-date">Fecha: 15/11/2025</span>
-                <span class="appointment-time">Hora: 14:30</span>
-                <span class="appointment-status">Completada</span>
-            </li>
-            <li>
-                <span class="appointment-service">Consulta Médica</span>
-                <span class="appointment-date">Fecha: 08/11/2025</span>
-                <span class="appointment-time">Hora: 10:00</span>
-                <span class="appointment-status">Completada</span>
-            </li>
-            <li>
-                <span class="appointment-service">Masaje Relajante</span>
-                <span class="appointment-date">Fecha: 20/11/2025</span>
-                <span class="appointment-time">Hora: 16:00</span>
-                <span class="appointment-status">Programada</span>
-            </li>
-        </ul>
-    </section>
+<body>
+    <div class="container">
+        <div class="profile-initial-icon" id="profilePageIcon">
+            <img src="IMG/users-svgrepo-com.svg" alt="">
+        </div>
+        <h1>Hola, <span id="display-name">...</span></h1>
+
+        <!-- Botones de Acción -->
+        <div style="display: flex; gap: 10px; margin-bottom: 15px; justify-content: center;">
+            <a href="../index.html"
+                style="padding: 10px 20px; background-color: #333; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">&larr;
+                Ir al Inicio</a>
+            <button id="btn-logout"
+                style="padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Cerrar
+                Sesión</button>
+        </div>
+
+        <!-- Barra de Navegación -->
+        <nav class="profile-nav">
+            <button class="nav-btn active" data-section="purchases">Mis Compras</button>
+            <button class="nav-btn" data-section="appointments">Mis Citas</button>
+        </nav>
+
+        <hr>
+
+        <!-- Sección de Compras (visible por defecto) -->
+        <section class="content-section active" id="purchases-section">
+            <h2>Mis Compras</h2>
+            <ul class="purchase-list">
+                <li>
+                    <span class="item-name">Producto A - Talla M</span>
+                    <span class="item-date">Fecha: 10/11/2025</span>
+                    <span class="item-price">$49.99</span>
+                </li>
+                <li>
+                    <span class="item-name">Libro "HTML y CSS"</span>
+                    <span class="item-date">Fecha: 05/11/2025</span>
+                    <span class="item-price">$25.50</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Sección de Citas (oculta inicialmente) -->
+        <section class="content-section" id="appointments-section">
+            <h2>Mis Citas Anteriores</h2>
+            <ul class="appointments-list">
+                <li>
+                    <span class="appointment-service">Corte de Cabello</span>
+                    <span class="appointment-date">Fecha: 15/11/2025</span>
+                    <span class="appointment-time">Hora: 14:30</span>
+                    <span class="appointment-status">Completada</span>
+                </li>
+                <li>
+                    <span class="appointment-service">Consulta Médica</span>
+                    <span class="appointment-date">Fecha: 08/11/2025</span>
+                    <span class="appointment-time">Hora: 10:00</span>
+                    <span class="appointment-status">Completada</span>
+                </li>
+                <li>
+                    <span class="appointment-service">Masaje Relajante</span>
+                    <span class="appointment-date">Fecha: 20/11/2025</span>
+                    <span class="appointment-time">Hora: 16:00</span>
+                    <span class="appointment-status">Programada</span>
+                </li>
+            </ul>
+        </section>
     </div>
 
     <script src="app.js"></script>
-    </body>
+</body>
 
 </html>
