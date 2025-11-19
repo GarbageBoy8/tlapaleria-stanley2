@@ -3,8 +3,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- VARIABLES GLOBALES ---
     const botonesAgregar = document.querySelectorAll('.btn-agregar-carrito');
-    const contadorCarrito = document.querySelector('.container-user .number'); 
-    const btnAbrirModal = document.querySelector('.fa-basket-shopping'); 
+    const contadorCarrito = document.querySelector('.container-user .number');
+    const btnAbrirModal = document.querySelector('.fa-basket-shopping');
     const modal = document.getElementById('modal-carrito');
     const btnCerrarModal = document.getElementById('btn-cerrar-modal');
     const contenedorItems = document.getElementById('carrito-items-container');
@@ -31,9 +31,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Si hay usuario logueado, cargar su carrito
+    // Si hay usuario logueado, cargar su carrito y actualizar enlace de perfil
     if (usuarioActual) {
         cargarCarritoUsuario();
+
+        // Actualizar enlace del ícono de usuario
+        const userLink = document.querySelector('.container-user a');
+        if (userLink) {
+            const currentHref = userLink.getAttribute('href');
+            // Reemplazar "Inicio de Sesion" por "user" manteniendo la ruta relativa
+            if (currentHref.includes('Inicio de Sesion')) {
+                const newHref = currentHref.replace('Inicio de Sesion', 'user');
+                userLink.setAttribute('href', newHref);
+            }
+        }
     } else {
         actualizarVistaDelCarrito([]);
     }
@@ -78,17 +89,17 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             console.log('🔄 Intentando cargar productos desde:', `${API_BASE_URL}/productos`);
             const response = await fetch(`${API_BASE_URL}/productos`);
-            
+
             if (response.ok) {
                 const productos = await response.json();
                 console.log('✅ Productos cargados desde BD:', productos);
-                
+
                 if (productos.length === 0) {
                     console.warn('⚠️ La base de datos está vacía. No hay productos insertados.');
                     mostrarToast('⚠️ No hay productos en la BD. Ejecuta insertar_productos.sql');
                     return;
                 }
-                
+
                 // Crear mapa: nombre -> id_producto
                 productos.forEach(prod => {
                     mapaProductos[prod.nombre] = prod.id_producto;
@@ -147,20 +158,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const boton = evento.target;
         const card = boton.closest('.card-producto');
         const nombreElemento = card.querySelector('.producto-nombre');
-        
+
         if (!nombreElemento) {
             mostrarToast('❌ Error: No se pudo encontrar el nombre del producto');
             console.error('Elemento .producto-nombre no encontrado');
             return;
         }
-        
+
         const nombre = nombreElemento.innerText.trim();
         console.log('Nombre del producto obtenido del HTML:', nombre);
         console.log('Mapa de productos disponible:', Object.keys(mapaProductos));
-        
+
         // Buscar el id_producto usando el mapa
         const id_producto = mapaProductos[nombre];
-        
+
         if (!id_producto) {
             mostrarToast('❌ Error: Producto no encontrado en la base de datos');
             console.error('Producto no encontrado en el mapa. Nombre buscado:', nombre);
@@ -168,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('¿Coinciden exactamente? Verifica mayúsculas, minúsculas y espacios.');
             return;
         }
-        
+
         console.log('ID del producto encontrado:', id_producto);
 
         try {
@@ -248,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const id_producto = parseInt(btn.getAttribute('data-id'));
                 const accion = btn.getAttribute('data-accion');
                 const producto = carrito.find(p => p.id_producto === id_producto);
-                
+
                 if (!producto) return;
 
                 let nuevaCantidad = producto.cantidad;
@@ -388,7 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function mostrarToast(mensaje) {
         if (!toast) return;
-        
+
         toast.innerText = mensaje;
         toast.classList.add('show');
 
