@@ -100,7 +100,7 @@ body {
     cursor: pointer;
 }
 
-.btn-user button #btn-logout {
+.btn-user #btn-logout {
     background-color: #e74c3c;
 }
 
