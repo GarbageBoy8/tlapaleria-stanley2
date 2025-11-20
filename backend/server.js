@@ -509,7 +509,7 @@ app.get('/api/admin/ventas', (req, res) => {
     JOIN crtusuarios u ON p.id_usuario = u.id
     JOIN detalles_pedido dp ON p.id_pedido = dp.id_pedido
     JOIN productos prod ON dp.id_producto = prod.id_producto
-    GROUP BY p.id_pedido
+    GROUP BY p.id_pedido, p.fecha, p.total, u.nombre
     ORDER BY p.fecha DESC
   `;
 
