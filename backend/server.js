@@ -492,6 +492,45 @@ app.get('/api/pedidos/:id_usuario', (req, res) => {
   });
 });
 
+/**
+ * 9. OBTENER ESTADÍSTICAS PARA ADMIN (GET /api/admin/stats)
+ * - Retorna ventas totales y productos vendidos
+ */
+app.get('/api/admin/stats', (req, res) => {
+  const sqlVentas = 'SELECT SUM(total) as total_ventas FROM pedidos';
+  const sqlProductos = 'SELECT SUM(cantidad) as total_productos FROM detalles_pedido';
+
+  db.getConnection((err, connection) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error de conexión' });
+    }
+
+    // Ejecutar ambas consultas en paralelo (o secuencial)
+    connection.query(sqlVentas, (err, resultVentas) => {
+      if (err) {
+        connection.release();
+        console.error('❌ Error al obtener ventas:', err);
+        return res.status(500).json({ error: 'Error al obtener estadísticas' });
+      }
+
+      connection.query(sqlProductos, (err, resultProductos) => {
+        connection.release();
+        if (err) {
+          console.error('❌ Error al obtener productos:', err);
+          return res.status(500).json({ error: 'Error al obtener estadísticas' });
+        }
+
+        const totalVentas = resultVentas[0].total_ventas || 0;
+        const totalProductos = resultProductos[0].total_productos || 0;
+
+        res.json({
+          ventas_totales: totalVentas,
+          productos_vendidos: totalProductos
+        });
+      });
+    });
+  });
+});
 
 // 🌐 Ruta raíz para verificar el estado del servidor
 app.get('/', (req, res) => {
