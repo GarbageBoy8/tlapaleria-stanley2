@@ -493,7 +493,44 @@ app.get('/api/pedidos/:id_usuario', (req, res) => {
 });
 
 /**
- * 9. OBTENER ESTADÍSTICAS PARA ADMIN (GET /api/admin/stats)
+ * 9. OBTENER HISTORIAL DE VENTAS PARA ADMIN (GET /api/admin/ventas)
+ * - Retorna todas las ventas con detalles de usuario y productos
+ */
+app.get('/api/admin/ventas', (req, res) => {
+  const sql = `
+    SELECT 
+      p.id_pedido,
+      p.fecha,
+      p.total,
+      u.nombre as cliente,
+      'completed' as estado,
+      GROUP_CONCAT(CONCAT(prod.nombre, ' (', dp.cantidad, ')') SEPARATOR ', ') as productos
+    FROM pedidos p
+    JOIN crtusuarios u ON p.id_usuario = u.id
+    JOIN detalles_pedido dp ON p.id_pedido = dp.id_pedido
+    JOIN productos prod ON dp.id_producto = prod.id_producto
+    GROUP BY p.id_pedido
+    ORDER BY p.fecha DESC
+  `;
+
+  db.getConnection((err, connection) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error de conexión' });
+    }
+
+    connection.query(sql, (err, results) => {
+      connection.release();
+      if (err) {
+        console.error('❌ Error al obtener ventas:', err);
+        return res.status(500).json({ error: 'Error al obtener historial de ventas' });
+      }
+      res.json(results);
+    });
+  });
+});
+
+/**
+ * 10. OBTENER ESTADÍSTICAS PARA ADMIN (GET /api/admin/stats)
  * - Retorna ventas totales y productos vendidos
  */
 app.get('/api/admin/stats', (req, res) => {

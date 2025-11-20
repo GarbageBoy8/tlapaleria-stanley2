@@ -1,86 +1,5 @@
-// Datos de ejemplo para simular las ventas
-const sampleSales = [
-    {
-        id: "V-001",
-        date: "2023-10-15",
-        customer: "Juan Pérez",
-        products: "Laptop, Mouse",
-        total: 1250.00,
-        status: "completed"
-    },
-    {
-        id: "V-002",
-        date: "2023-10-14",
-        customer: "María García",
-        products: "Smartphone, Funda",
-        total: 850.50,
-        status: "completed"
-    },
-    {
-        id: "V-003",
-        date: "2023-10-13",
-        customer: "Carlos López",
-        products: "Tablet, Teclado",
-        total: 620.75,
-        status: "pending"
-    },
-    {
-        id: "V-004",
-        date: "2023-10-12",
-        customer: "Ana Martínez",
-        products: "Monitor, Cable HDMI",
-        total: 320.00,
-        status: "completed"
-    },
-    {
-        id: "V-005",
-        date: "2023-10-11",
-        customer: "Luis Rodríguez",
-        products: "Auriculares, Adaptador",
-        total: 150.25,
-        status: "cancelled"
-    },
-    {
-        id: "V-006",
-        date: "2023-10-10",
-        customer: "Elena Sánchez",
-        products: "Impresora, Cartuchos",
-        total: 280.00,
-        status: "completed"
-    },
-    {
-        id: "V-007",
-        date: "2023-10-09",
-        customer: "Pedro Gómez",
-        products: "Router, Cable Ethernet",
-        total: 95.50,
-        status: "pending"
-    },
-    {
-        id: "V-008",
-        date: "2023-10-08",
-        customer: "Sofía Hernández",
-        products: "Smartwatch, Banda",
-        total: 210.00,
-        status: "completed"
-    },
-    {
-        id: "V-009",
-        date: "2023-10-07",
-        customer: "Miguel Torres",
-        products: "Cámara, Trípode",
-        total: 450.75,
-        status: "completed"
-    },
-    {
-        id: "V-010",
-        date: "2023-10-06",
-        customer: "Laura Díaz",
-        products: "Altavoz, Cable AUX",
-        total: 120.00,
-        status: "cancelled"
-    }
-];
+// URL Base de la API
+const API_BASE_URL = 'https://tlapaleria-backend.onrender.com';
 
 // Función para renderizar la tabla de ventas
 function renderSalesTable(salesData) {
@@ -88,6 +7,11 @@ function renderSalesTable(salesData) {
     if (!tableBody) return; // Evitar errores si no existe la tabla en esta página
 
     tableBody.innerHTML = '';
+
+    if (salesData.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No hay ventas registradas</td></tr>';
+        return;
+    }
 
     salesData.forEach(sale => {
         const row = document.createElement('tr');
@@ -109,18 +33,27 @@ function renderSalesTable(salesData) {
                 statusClass = 'cancelled';
                 statusText = 'Cancelado';
                 break;
+            default:
+                statusClass = 'completed';
+                statusText = 'Completado';
         }
 
+        // Formatear fecha
+        const fecha = new Date(sale.date).toLocaleDateString('es-MX', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
         row.innerHTML = `
-            <td>${sale.id}</td>
-            <td>${sale.date}</td>
+            <td>#${sale.id}</td>
+            <td>${fecha}</td>
             <td>${sale.customer}</td>
             <td>${sale.products}</td>
-            <td>$${sale.total.toFixed(2)}</td>
+            <td>$${parseFloat(sale.total).toFixed(2)}</td>
             <td><span class="status ${statusClass}">${statusText}</span></td>
             <td>
                 <button class="btn btn-primary" onclick="viewSale('${sale.id}')">Ver</button>
-                <button class="btn btn-secondary" onclick="editSale('${sale.id}')">Editar</button>
             </td>
         `;
 
@@ -130,7 +63,7 @@ function renderSalesTable(salesData) {
 
 // Funciones para las acciones de venta
 function viewSale(saleId) {
-    alert(`Ver detalles de la venta: ${saleId}`);
+    alert(`Detalles de la venta #${saleId}`);
 }
 
 function editSale(saleId) {
@@ -144,17 +77,15 @@ function exportData() {
 
 // Función para actualizar datos
 function refreshData() {
-    alert('Actualizando datos...');
-    cargarEstadisticas(); // Recargar también las estadísticas
+    cargarEstadisticas();
+    cargarHistorialVentas();
 }
 
 // Inicializar la página
 document.addEventListener('DOMContentLoaded', function () {
-    // Cargar estadísticas reales
+    // Cargar datos reales
     cargarEstadisticas();
-
-    // Renderizar la tabla con datos de ejemplo
-    renderSalesTable(sampleSales);
+    cargarHistorialVentas();
 
     // Asignar eventos a los botones
     const exportBtn = document.getElementById('export-btn');
@@ -167,10 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // Función para cargar estadísticas reales
 async function cargarEstadisticas() {
     try {
-        // Usar la URL base definida en config.js si existe, o la de producción
-        const API_URL = 'https://tlapaleria-backend.onrender.com';
-
-        const response = await fetch(`${API_URL}/api/admin/stats`);
+        const response = await fetch(`${API_BASE_URL}/api/admin/stats`);
         if (response.ok) {
             const data = await response.json();
 
@@ -194,5 +122,38 @@ async function cargarEstadisticas() {
         }
     } catch (error) {
         console.error('Error de conexión:', error);
+    }
+}
+
+// Función para cargar historial de ventas real
+async function cargarHistorialVentas() {
+    const tableBody = document.getElementById('sales-table-body');
+    if (!tableBody) return; // Solo ejecutar si estamos en la página de ventas
+
+    try {
+        tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Cargando ventas...</td></tr>';
+
+        const response = await fetch(`${API_BASE_URL}/api/admin/ventas`);
+        if (response.ok) {
+            const data = await response.json();
+
+            // Mapear datos de la API al formato de la tabla
+            const salesData = data.map(item => ({
+                id: item.id_pedido,
+                date: item.fecha,
+                customer: item.cliente,
+                products: item.productos,
+                total: item.total,
+                status: item.estado || 'completed'
+            }));
+
+            renderSalesTable(salesData);
+        } else {
+            console.error('Error al cargar historial de ventas');
+            tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: red;">Error al cargar datos</td></tr>';
+        }
+    } catch (error) {
+        console.error('Error de conexión:', error);
+        tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: red;">Error de conexión</td></tr>';
     }
 }
