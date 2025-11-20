@@ -128,52 +128,6 @@ function renderSalesTable(salesData) {
     });
 }
 
-// Función para aplicar filtros
-function applyFilters() {
-    const statusFilter = document.getElementById('status').value;
-    const customerFilter = document.getElementById('customer').value;
-    const dateFrom = document.getElementById('date-from').value;
-    const dateTo = document.getElementById('date-to').value;
-
-    let filteredSales = [...sampleSales];
-
-    // Filtrar por estado
-    if (statusFilter) {
-        filteredSales = filteredSales.filter(sale => sale.status === statusFilter);
-    }
-
-    // Filtrar por cliente
-    if (customerFilter) {
-        filteredSales = filteredSales.filter(sale => sale.customer === customerFilter);
-    }
-
-    // Filtrar por fecha
-    if (dateFrom) {
-        filteredSales = filteredSales.filter(sale => sale.date >= dateFrom);
-    }
-
-    if (dateTo) {
-        filteredSales = filteredSales.filter(sale => sale.date <= dateTo);
-    }
-
-    renderSalesTable(filteredSales);
-}
-
-// Función para limpiar filtros
-function clearFilters() {
-    const statusInput = document.getElementById('status');
-    const customerInput = document.getElementById('customer');
-    const dateFromInput = document.getElementById('date-from');
-    const dateToInput = document.getElementById('date-to');
-
-    if (statusInput) statusInput.value = '';
-    if (customerInput) customerInput.value = '';
-    if (dateFromInput) dateFromInput.value = '';
-    if (dateToInput) dateToInput.value = '';
-
-    renderSalesTable(sampleSales);
-}
-
 // Funciones para las acciones de venta
 function viewSale(saleId) {
     alert(`Ver detalles de la venta: ${saleId}`);
@@ -203,28 +157,11 @@ document.addEventListener('DOMContentLoaded', function () {
     renderSalesTable(sampleSales);
 
     // Asignar eventos a los botones
-    const applyFiltersBtn = document.getElementById('apply-filters');
-    if (applyFiltersBtn) applyFiltersBtn.addEventListener('click', applyFilters);
-
-    const clearFiltersBtn = document.querySelector('.btn-secondary');
-    if (clearFiltersBtn) clearFiltersBtn.addEventListener('click', clearFilters);
-
     const exportBtn = document.getElementById('export-btn');
     if (exportBtn) exportBtn.addEventListener('click', exportData);
 
     const refreshBtn = document.getElementById('refresh-btn');
     if (refreshBtn) refreshBtn.addEventListener('click', refreshData);
-
-    // Establecer fechas por defecto (últimos 30 días)
-    const today = new Date();
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(today.getDate() - 30);
-
-    const dateFromInput = document.getElementById('date-from');
-    if (dateFromInput) dateFromInput.value = thirtyDaysAgo.toISOString().split('T')[0];
-
-    const dateToInput = document.getElementById('date-to');
-    if (dateToInput) dateToInput.value = today.toISOString().split('T')[0];
 });
 
 // Función para cargar estadísticas reales
