@@ -239,6 +239,7 @@ async function cargarEstadisticas() {
 
             const totalVentasElement = document.getElementById('total-ventas');
             const totalProductosElement = document.getElementById('total-productos');
+            const totalUsuariosElement = document.getElementById('total-usuarios');
 
             if (totalVentasElement) {
                 totalVentasElement.textContent = `$${parseFloat(data.ventas_totales || 0).toFixed(2)}`;
@@ -246,6 +247,10 @@ async function cargarEstadisticas() {
 
             if (totalProductosElement) {
                 totalProductosElement.textContent = data.productos_vendidos || 0;
+            }
+
+            if (totalUsuariosElement) {
+                totalUsuariosElement.textContent = data.total_usuarios || 0;
             }
         } else {
             console.error('Error al cargar estadísticas');

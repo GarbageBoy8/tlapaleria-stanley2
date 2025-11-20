@@ -499,13 +499,14 @@ app.get('/api/pedidos/:id_usuario', (req, res) => {
 app.get('/api/admin/stats', (req, res) => {
   const sqlVentas = 'SELECT SUM(total) as total_ventas FROM pedidos';
   const sqlProductos = 'SELECT SUM(cantidad) as total_productos FROM detalles_pedido';
+  const sqlUsuarios = 'SELECT COUNT(*) as total_usuarios FROM crtusuarios';
 
   db.getConnection((err, connection) => {
     if (err) {
       return res.status(500).json({ error: 'Error de conexión' });
     }
 
-    // Ejecutar ambas consultas en paralelo (o secuencial)
+    // Ejecutar consultas secuencialmente (callback hell, pero seguro sin promesas configuradas en pool)
     connection.query(sqlVentas, (err, resultVentas) => {
       if (err) {
         connection.release();
@@ -514,18 +515,28 @@ app.get('/api/admin/stats', (req, res) => {
       }
 
       connection.query(sqlProductos, (err, resultProductos) => {
-        connection.release();
         if (err) {
+          connection.release();
           console.error('❌ Error al obtener productos:', err);
           return res.status(500).json({ error: 'Error al obtener estadísticas' });
         }
 
-        const totalVentas = resultVentas[0].total_ventas || 0;
-        const totalProductos = resultProductos[0].total_productos || 0;
+        connection.query(sqlUsuarios, (err, resultUsuarios) => {
+          connection.release();
+          if (err) {
+            console.error('❌ Error al obtener usuarios:', err);
+            return res.status(500).json({ error: 'Error al obtener estadísticas' });
+          }
 
-        res.json({
-          ventas_totales: totalVentas,
-          productos_vendidos: totalProductos
+          const totalVentas = resultVentas[0].total_ventas || 0;
+          const totalProductos = resultProductos[0].total_productos || 0;
+          const totalUsuarios = resultUsuarios[0].total_usuarios || 0;
+
+          res.json({
+            ventas_totales: totalVentas,
+            productos_vendidos: totalProductos,
+            total_usuarios: totalUsuarios
+          });
         });
       });
     });
