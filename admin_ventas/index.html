@@ -1,17 +1,32 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Administración </title>
+    <title>Panel de Administración</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
+    <script>
+        // 🔒 PROTECCIÓN DE RUTA: Solo administradores
+        const usuarioGuardado = localStorage.getItem('usuario');
+        if (!usuarioGuardado) {
+            window.location.href = '../Inicio de Sesion/index.html';
+        } else {
+            const usuario = JSON.parse(usuarioGuardado);
+            if (usuario.rol !== 'admin') {
+                alert('⛔ Acceso denegado. Solo administradores.');
+                window.location.href = '../index.html';
+            }
+        }
+    </script>
     <div class="container">
         <!-- Sidebar -->
         <div class="sidebar">
             <div class="sidebar-header">
-                <h2>Panel Principal </h2>
+                <h2>Panel Principal</h2>
             </div>
             <ul class="sidebar-menu">
                 <li><a href="index.html"><i></i> Panel Principal</a></li>
@@ -65,10 +80,10 @@
                     <div class="card-change negative">-2.1% vs mes anterior</div>
                 </div>
             </div>
-
-            
-    </div>  
+        </div>
+    </div>
 
     <script src="app.js"></script>
 </body>
+
 </html>

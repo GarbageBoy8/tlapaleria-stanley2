@@ -130,7 +130,8 @@ app.post('/verify', (req, res) => {
   }
 
   // Seleccionamos solo los datos que necesitamos, NUNCA la contraseña
-  const sql = 'SELECT id, nombre, usuario, correo FROM crtusuarios WHERE usuario = ? AND password = ?';
+  // AHORA INCLUIMOS EL ROL
+  const sql = 'SELECT id, nombre, usuario, correo, rol FROM crtusuarios WHERE usuario = ? AND password = ?';
 
   db.getConnection((err, connection) => {
     if (err) {
@@ -148,16 +149,13 @@ app.post('/verify', (req, res) => {
 
       if (results.length > 0) {
         console.log(`✅ Inicio de sesión exitoso: ${usuario}`);
-
-        // ¡CAMBIO CLAVE! Enviamos el objeto de usuario al frontend
         res.json({
-          message: '✅ Inicio de sesión exitoso',
-          usuario: results[0] // Contiene { id, nombre, usuario, correo }
+          success: true,
+          usuario: results[0] // Incluye 'rol'
         });
-
       } else {
-        console.log('❌ Usuario o contraseña incorrectos');
-        res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
+        console.warn(`⚠️ Fallo de inicio de sesión: ${usuario}`);
+        res.status(401).json({ success: false, message: 'Usuario o contraseña incorrectos' });
       }
     });
   });

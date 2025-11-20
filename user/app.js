@@ -38,6 +38,14 @@ document.addEventListener('DOMContentLoaded', function () {
         displayNameElement.textContent = usuarioActual.nombre;
     }
 
+    // 2.5 Mostrar botón de admin si corresponde
+    if (usuarioActual && usuarioActual.rol === 'admin') {
+        const adminBtnContainer = document.getElementById('admin-panel-btn-container');
+        if (adminBtnContainer) {
+            adminBtnContainer.style.display = 'block';
+        }
+    }
+
     // 3. Lógica del botón de Cerrar Sesión
     const btnLogout = document.getElementById('btn-logout');
     if (btnLogout) {
