@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (productos.length === 0) {
                     console.warn('⚠️ La base de datos está vacía. No hay productos insertados.');
-                    mostrarToast('⚠️ No hay productos en la BD. Ejecuta insertar_productos.sql');
+                    mostrarToast('Bienvenido');
                     return;
                 }
 
