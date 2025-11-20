@@ -497,6 +497,7 @@ app.get('/api/pedidos/:id_usuario', (req, res) => {
  * - Retorna todas las ventas con detalles de usuario y productos
  */
 app.get('/api/admin/ventas', (req, res) => {
+  // Consulta plana sin GROUP BY para evitar errores de sql_mode
   const sql = `
     SELECT 
       p.id_pedido,
@@ -504,17 +505,18 @@ app.get('/api/admin/ventas', (req, res) => {
       p.total,
       u.nombre as cliente,
       'completed' as estado,
-      GROUP_CONCAT(CONCAT(prod.nombre, ' (', dp.cantidad, ')') SEPARATOR ', ') as productos
+      prod.nombre as nombre_producto,
+      dp.cantidad
     FROM pedidos p
     JOIN crtusuarios u ON p.id_usuario = u.id
     JOIN detalles_pedido dp ON p.id_pedido = dp.id_pedido
     JOIN productos prod ON dp.id_producto = prod.id_producto
-    GROUP BY p.id_pedido, p.fecha, p.total, u.nombre
     ORDER BY p.fecha DESC
   `;
 
   db.getConnection((err, connection) => {
     if (err) {
+      console.error('❌ Error de conexión en /api/admin/ventas:', err);
       return res.status(500).json({ error: 'Error de conexión' });
     }
 
@@ -522,9 +524,39 @@ app.get('/api/admin/ventas', (req, res) => {
       connection.release();
       if (err) {
         console.error('❌ Error al obtener ventas:', err);
-        return res.status(500).json({ error: 'Error al obtener historial de ventas' });
+        // Devolver el mensaje de error específico para depuración
+        return res.status(500).json({ error: 'Error al obtener historial de ventas', details: err.message });
       }
-      res.json(results);
+
+      try {
+        // Agrupar resultados en JavaScript
+        const ventasMap = {};
+
+        results.forEach(row => {
+          if (!ventasMap[row.id_pedido]) {
+            ventasMap[row.id_pedido] = {
+              id_pedido: row.id_pedido,
+              fecha: row.fecha,
+              total: row.total,
+              cliente: row.cliente,
+              estado: row.estado,
+              productos: []
+            };
+          }
+          ventasMap[row.id_pedido].productos.push(`${row.nombre_producto} (${row.cantidad})`);
+        });
+
+        // Convertir mapa a array y formatear string de productos
+        const ventasFinal = Object.values(ventasMap).map(venta => ({
+          ...venta,
+          productos: venta.productos.join(', ')
+        }));
+
+        res.json(ventasFinal);
+      } catch (processError) {
+        console.error('❌ Error al procesar datos de ventas:', processError);
+        res.status(500).json({ error: 'Error al procesar datos' });
+      }
     });
   });
 });
