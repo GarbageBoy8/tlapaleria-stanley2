@@ -61,7 +61,7 @@ body {
     mix-blend-mode: multiply;
     background-color: transparent;
 }
-.btn-panel  a{
+.btn-panel  {
     position: absolute;
     background-color: var(--icon-color);
     display: flex;
