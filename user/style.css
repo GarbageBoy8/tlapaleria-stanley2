@@ -62,7 +62,7 @@ body {
     background-color: transparent;
 }
 .btn-panel  a{
-    position: relative;
+    position: absolute;
     background-color: var(--icon-color);
     display: flex;
     justify-content: end;    
