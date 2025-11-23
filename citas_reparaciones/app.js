@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // Enviar al backend
-            const response = await fetch(`${API_URL}/api/citas`, {
+            const response = await fetch(`${API_BASE_URL}/api/citas`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function cargarHistorial(idUsuario) {
         try {
-            const response = await fetch(`${API_URL}/api/citas/${idUsuario}`);
+            const response = await fetch(`${API_BASE_URL}/api/citas/${idUsuario}`);
             if (!response.ok) throw new Error('Error al obtener citas');
 
             const citas = await response.json();
