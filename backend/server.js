@@ -612,6 +612,95 @@ app.get('/api/admin/stats', (req, res) => {
   });
 });
 
+// ================================================================
+// 📅 RUTAS DE CITAS Y REPARACIONES
+// ================================================================
+
+/**
+ * 11. AGENDAR CITA (POST /api/citas)
+ * - Valida que la fecha sea futura
+ * - Valida que el horario esté disponible
+ */
+app.post('/api/citas', (req, res) => {
+  const { id_usuario, fecha, hora, descripcion } = req.body;
+
+  if (!id_usuario || !fecha || !hora) {
+    return res.status(400).json({ error: 'Faltan datos (usuario, fecha, hora)' });
+  }
+
+  // 1. Validar fecha futura
+  const fechaCita = new Date(`${fecha}T${hora}`);
+  const ahora = new Date();
+
+  if (fechaCita < ahora) {
+    return res.status(400).json({ error: 'La fecha y hora deben ser futuras' });
+  }
+
+  // 2. Validar disponibilidad (evitar duplicados en misma fecha/hora)
+  const sqlCheck = 'SELECT COUNT(*) as count FROM citas WHERE fecha = ? AND hora = ?';
+
+  db.getConnection((err, connection) => {
+    if (err) {
+      console.error('❌ Error conexión:', err);
+      return res.status(500).json({ error: 'Error de conexión' });
+    }
+
+    connection.query(sqlCheck, [fecha, hora], (err, results) => {
+      if (err) {
+        connection.release();
+        console.error('❌ Error validando cita:', err);
+        return res.status(500).json({ error: 'Error al validar disponibilidad' });
+      }
+
+      if (results[0].count > 0) {
+        connection.release();
+        return res.status(409).json({ error: 'Lo sentimos, ese horario ya está ocupado. Por favor elige otro.' });
+      }
+
+      // 3. Insertar cita si está libre
+      const sqlInsert = 'INSERT INTO citas (id_usuario, fecha, hora, descripcion) VALUES (?, ?, ?, ?)';
+
+      connection.query(sqlInsert, [id_usuario, fecha, hora, descripcion], (err, result) => {
+        connection.release();
+        if (err) {
+          console.error('❌ Error al agendar cita:', err);
+          return res.status(500).json({ error: 'Error al agendar la cita' });
+        }
+        res.status(201).json({ message: 'Cita agendada exitosamente', id_cita: result.insertId });
+      });
+    });
+  });
+});
+
+/**
+ * 12. OBTENER HISTORIAL DE CITAS (GET /api/citas/:id_usuario)
+ */
+app.get('/api/citas/:id_usuario', (req, res) => {
+  const { id_usuario } = req.params;
+
+  const sql = `
+    SELECT id_cita, fecha, hora, descripcion, estado 
+    FROM citas 
+    WHERE id_usuario = ? 
+    ORDER BY fecha DESC, hora DESC
+  `;
+
+  db.getConnection((err, connection) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error de conexión' });
+    }
+
+    connection.query(sql, [id_usuario], (err, results) => {
+      connection.release();
+      if (err) {
+        console.error('❌ Error al obtener citas:', err);
+        return res.status(500).json({ error: 'Error al obtener historial de citas' });
+      }
+      res.json(results);
+    });
+  });
+});
+
 // 🌐 Ruta raíz para verificar el estado del servidor
 app.get('/', (req, res) => {
   res.send('Servidor backend conectado a Clever Cloud 🚀');
