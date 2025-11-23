@@ -68,7 +68,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Generar PDF (llamando a la función global del script inline si existe, o re-implementando)
                 if (typeof genPDF === 'function') {
-                    genPDF();
+                    genPDF({
+                        nombre,
+                        telefono,
+                        correo,
+                        asunto,
+                        fecha,
+                        hora,
+                        mensaje
+                    });
                 }
 
                 // Recargar historial y limpiar formulario
