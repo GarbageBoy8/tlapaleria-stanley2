@@ -1,34 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
     const tableBody = document.getElementById('citas-table-body');
-    const refreshBtn = document.getElementById('refresh-btn');
-    const statusFilter = document.getElementById('status-filter');
+    // El botón refresh puede que ya no exista si eliminamos toda la barra de filtros, 
+    // pero si dejamos un botón de actualizar en otro lado, lo usamos.
+    // En el HTML anterior, el botón estaba DENTRO de los filtros.
+    // Si el usuario pidió quitar filtros, asumimos carga automática.
 
     // Cargar citas al iniciar
     cargarCitas();
-
-    // Event listeners
-    refreshBtn.addEventListener('click', cargarCitas);
-    statusFilter.addEventListener('change', cargarCitas);
 
     async function cargarCitas() {
         try {
             tableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Cargando...</td></tr>';
 
+            console.log("Intentando cargar citas desde:", `${API_BASE_URL}/api/admin/citas`);
+
             const response = await fetch(`${API_BASE_URL}/api/admin/citas`);
-            if (!response.ok) throw new Error('Error al cargar citas');
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Error del servidor: ${response.status} - ${errorText}`);
+            }
 
             let citas = await response.json();
 
-            // Filtrar si hay un estado seleccionado
-            const filtro = statusFilter.value.toLowerCase();
-            if (filtro) {
-                citas = citas.filter(c => c.estado.toLowerCase() === filtro);
-            }
-
             renderTable(citas);
         } catch (error) {
-            console.error('Error:', error);
-            tableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: red;">Error al cargar datos. Intente de nuevo.</td></tr>';
+            console.error('Error detallado:', error);
+            tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: red;">Error: ${error.message}</td></tr>`;
         }
     }
 
@@ -49,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Botón de acción principal según estado
             let accionBtn = '';
             if (cita.estado === 'pendiente') {
-                accionBtn = `<button class="btn-action btn-resuelto" onclick="cambiarEstado(${cita.id_cita}, 'resuelto')">Marcar Resuelto</button>`;
+                accionBtn = `<button class="btn-action btn-resuelto" onclick="cambiarEstado(${cita.id_cita}, 'resuelto')" style="background-color: #2980b9; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Marcar Resuelto</button>`;
             } else if (cita.estado === 'resuelto') {
                 accionBtn = `<span style="color: green;"><i class="fa-solid fa-check"></i> Completado</span>`;
             } else {
