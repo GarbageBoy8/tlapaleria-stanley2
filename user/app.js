@@ -119,12 +119,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
             } else {
-                console.error('Error al cargar historial');
-                listaCompras.innerHTML = '<p>Error al cargar tus compras.</p>';
+                const errorText = await response.text();
+                console.error('Error al cargar historial:', response.status, errorText);
+                listaCompras.innerHTML = `<p style="color: red;">Error ${response.status}: ${errorText || 'No se pudo cargar el historial'}</p>`;
             }
         } catch (error) {
             console.error('Error de conexión:', error);
-            listaCompras.innerHTML = '<p>Error de conexión.</p>';
+            listaCompras.innerHTML = `<p style="color: red;">Error de conexión: ${error.message}</p>`;
         }
     }
 
