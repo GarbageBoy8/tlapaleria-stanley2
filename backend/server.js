@@ -33,9 +33,12 @@ function createPool() {
     password: process.env.DB_PASSWORD, // Contraseña
     database: process.env.DB_NAME,     // Nombre de la base de datos
     port: process.env.DB_PORT || 3306, // Puerto
-    connectionLimit: 10,               // Máximo de conexiones simultáneas
+    port: process.env.DB_PORT || 3306, // Puerto
+    connectionLimit: 5,                // Reducido a 5 para evitar saturar plan gratuito
     waitForConnections: true,          // Espera si no hay conexiones disponibles
-    queueLimit: 0                      // Sin límite de cola
+    queueLimit: 0,                     // Sin límite de cola
+    enableKeepAlive: true,             // Mantener conexiones vivas
+    keepAliveInitialDelay: 0           // Sin retardo inicial
   });
 
   console.log('🔁 Pool de conexiones MySQL creado');
