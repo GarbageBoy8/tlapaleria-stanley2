@@ -65,9 +65,14 @@ document.addEventListener('DOMContentLoaded', function () {
         // userIcon.textContent = usuarioActual.nombre.charAt(0).toUpperCase();
     }
 
-    // 4. Cargar historial de compras y citas
-    cargarHistorialCompras(usuarioActual.id);
-    cargarHistorialCitas(usuarioActual.id);
+    // 4. Cargar historial de compras y citas (Secuencial para evitar saturar conexiones)
+    async function cargarDatosPerfil() {
+        if (usuarioActual && usuarioActual.id) {
+            await cargarHistorialCompras(usuarioActual.id);
+            await cargarHistorialCitas(usuarioActual.id);
+        }
+    }
+    cargarDatosPerfil();
 
     async function cargarHistorialCompras(idUsuario) {
         const listaCompras = document.getElementById('lista-compras');

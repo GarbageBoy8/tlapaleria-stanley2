@@ -457,14 +457,15 @@ app.get('/api/pedidos/:id_usuario', (req, res) => {
 
   db.getConnection((err, connection) => {
     if (err) {
-      return res.status(500).json({ error: 'Error de conexión' });
+      console.error('❌ Error de conexión:', err);
+      return res.status(500).json({ error: 'Error de conexión', details: err.message });
     }
 
     connection.query(sql, [id_usuario], (err, results) => {
       connection.release();
       if (err) {
         console.error('❌ Error al obtener pedidos:', err);
-        return res.status(500).json({ error: 'Error al obtener historial' });
+        return res.status(500).json({ error: 'Error al obtener historial', details: err.message });
       }
 
       // Agrupar resultados por pedido
