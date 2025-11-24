@@ -34,7 +34,8 @@ function createPool() {
     database: process.env.DB_NAME,     // Nombre de la base de datos
     port: process.env.DB_PORT || 3306, // Puerto
     port: process.env.DB_PORT || 3306, // Puerto
-    connectionLimit: 5,                // Reducido a 5 para evitar saturar plan gratuito
+    port: process.env.DB_PORT || 3306, // Puerto
+    connectionLimit: 2,                // Reducido a 2 para asegurar margen en plan gratuito (max 5)
     waitForConnections: true,          // Espera si no hay conexiones disponibles
     queueLimit: 0,                     // Sin límite de cola
     enableKeepAlive: true,             // Mantener conexiones vivas
