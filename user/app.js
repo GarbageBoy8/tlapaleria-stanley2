@@ -65,8 +65,9 @@ document.addEventListener('DOMContentLoaded', function () {
         // userIcon.textContent = usuarioActual.nombre.charAt(0).toUpperCase();
     }
 
-    // 4. Cargar historial de compras
+    // 4. Cargar historial de compras y citas
     cargarHistorialCompras(usuarioActual.id);
+    cargarHistorialCitas(usuarioActual.id);
 
     async function cargarHistorialCompras(idUsuario) {
         const listaCompras = document.getElementById('lista-compras');
@@ -124,6 +125,72 @@ document.addEventListener('DOMContentLoaded', function () {
         } catch (error) {
             console.error('Error de conexión:', error);
             listaCompras.innerHTML = '<p>Error de conexión.</p>';
+        }
+    }
+
+    async function cargarHistorialCitas(idUsuario) {
+        const listaCitas = document.getElementById('lista-citas');
+        if (!listaCitas) return;
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/citas/${idUsuario}`);
+
+            if (response.ok) {
+                const citas = await response.json();
+
+                if (citas.length === 0) {
+                    listaCitas.innerHTML = '<p>No tienes citas agendadas.</p>';
+                    return;
+                }
+
+                listaCitas.innerHTML = ''; // Limpiar mensaje de carga
+
+                citas.forEach(cita => {
+                    const li = document.createElement('li');
+                    li.style.marginBottom = '15px';
+                    li.style.borderBottom = '1px solid #eee';
+                    li.style.paddingBottom = '10px';
+                    li.style.display = 'flex';
+                    li.style.flexDirection = 'column';
+                    li.style.gap = '5px';
+
+                    const fecha = new Date(cita.fecha).toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+                    const estadoColor = getColorEstado(cita.estado);
+
+                    li.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-weight: bold; font-size: 1.1rem;">${cita.descripcion.split(':')[0]}</span>
+                            <span style="padding: 4px 10px; border-radius: 15px; background: ${estadoColor}; color: white; font-size: 0.8rem;">
+                                ${cita.estado}
+                            </span>
+                        </div>
+                        <div style="color: #666; font-size: 0.9rem;">
+                            <i class="fa-regular fa-calendar"></i> ${fecha} &nbsp;|&nbsp; 
+                            <i class="fa-regular fa-clock"></i> ${cita.hora}
+                        </div>
+                        <div style="color: #888; font-size: 0.9rem; font-style: italic;">
+                            ${cita.descripcion.split(':').slice(1).join(':').trim() || ''}
+                        </div>
+                    `;
+
+                    listaCitas.appendChild(li);
+                });
+
+            } else {
+                listaCitas.innerHTML = '<p>Error al cargar tus citas.</p>';
+            }
+        } catch (error) {
+            console.error('Error de conexión:', error);
+            listaCitas.innerHTML = '<p>Error de conexión.</p>';
+        }
+    }
+
+    function getColorEstado(estado) {
+        switch (estado.toLowerCase()) {
+            case 'pendiente': return '#f39c12'; // Naranja
+            case 'confirmada': return '#27ae60'; // Verde
+            case 'cancelada': return '#c0392b'; // Rojo
+            default: return '#7f8c8d'; // Gris
         }
     }
 });
