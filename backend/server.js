@@ -701,6 +701,72 @@ app.get('/api/citas/:id_usuario', (req, res) => {
   });
 });
 
+/**
+ * 13. OBTENER TODAS LAS CITAS PARA ADMIN (GET /api/admin/citas)
+ */
+app.get('/api/admin/citas', (req, res) => {
+  const sql = `
+    SELECT 
+      c.id_cita, 
+      c.fecha, 
+      c.hora, 
+      c.descripcion, 
+      c.estado,
+      u.nombre as cliente,
+      u.correo
+    FROM citas c
+    JOIN crtusuarios u ON c.id_usuario = u.id
+    ORDER BY c.fecha DESC, c.hora DESC
+  `;
+
+  db.getConnection((err, connection) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error de conexión' });
+    }
+
+    connection.query(sql, (err, results) => {
+      connection.release();
+      if (err) {
+        console.error('❌ Error al obtener todas las citas:', err);
+        return res.status(500).json({ error: 'Error al obtener historial de citas' });
+      }
+      res.json(results);
+    });
+  });
+});
+
+/**
+ * 14. ACTUALIZAR ESTADO DE CITA (PUT /api/admin/citas/:id/estado)
+ */
+app.put('/api/admin/citas/:id/estado', (req, res) => {
+  const { id } = req.params;
+  const { estado } = req.body;
+
+  if (!estado) {
+    return res.status(400).json({ error: 'Falta el nuevo estado' });
+  }
+
+  const sql = 'UPDATE citas SET estado = ? WHERE id_cita = ?';
+
+  db.getConnection((err, connection) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error de conexión' });
+    }
+
+    connection.query(sql, [estado, id], (err, result) => {
+      connection.release();
+      if (err) {
+        console.error('❌ Error al actualizar estado de cita:', err);
+        return res.status(500).json({ error: 'Error al actualizar estado' });
+      }
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Cita no encontrada' });
+      }
+      res.json({ message: 'Estado actualizado correctamente' });
+    });
+  });
+});
+
 // 🌐 Ruta raíz para verificar el estado del servidor
 app.get('/', (req, res) => {
   res.send('Servidor backend conectado a Clever Cloud 🚀');

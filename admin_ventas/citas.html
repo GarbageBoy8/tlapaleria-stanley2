@@ -1,107 +1,109 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Administración </title>
+    <title>Panel de Administración - Citas</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- FontAwesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
+
 <body>
+    <script>
+        // 🔒 PROTECCIÓN DE RUTA: Solo administradores
+        const usuarioGuardado = localStorage.getItem('usuario');
+        if (!usuarioGuardado) {
+            window.location.href = '../Inicio de Sesion/index.html';
+        } else {
+            const usuario = JSON.parse(usuarioGuardado);
+            if (usuario.rol !== 'admin') {
+                alert('⛔ Acceso denegado. Solo administradores.');
+                window.location.href = '../index.html';
+            }
+        }
+    </script>
     <div class="container">
         <!-- Sidebar -->
         <div class="sidebar">
             <div class="sidebar-header">
-                <h2>Panel de Citas</h2>
+                <h2>Panel Principal</h2>
             </div>
             <ul class="sidebar-menu">
                 <li><a href="index.html"><i></i> Panel Principal</a></li>
                 <li><a href="ventas.html"><i></i> Ventas</a></li>
-                <li><a href="citas.html"><i></i>Citas </a></li>
+                <li><a href="citas.html" class="active"><i></i>Citas </a></li>
             </ul>
         </div>
 
         <!-- Main Content -->
         <div class="main-content">
             <div class="header">
-                <h1>Panel de Citas</h1>
+                <h1>Gestión de Citas y Reparaciones</h1>
                 <div class="user-info">
-                    <img src="https://via.placeholder.com/40" alt="Usuario">
+                    <img src="../img/users-svgrepo-com.svg" alt="Usuario">
                     <span>Administrador</span>
                 </div>
             </div>
-            <!-- Filters -->
+
+            <!-- Filters (Simplificado por ahora) -->
             <div class="filters">
                 <div class="filter-row">
                     <div class="filter-group">
-                        <label for="date-range">Rango de Fechas</label>
-                        <input type="date" id="date-from">
-                        <span>a</span>
-                        <input type="date" id="date-to">
-                    </div>
-                    <div class="filter-group">
-                        <label for="status">Estado</label>
-                        <select id="status">
+                        <label for="status-filter">Filtrar por Estado</label>
+                        <select id="status-filter">
                             <option value="">Todos</option>
-                            <option value="completed">Completado</option>
-                            <option value="pending">Pendiente</option>
-                            <option value="cancelled">Cancelado</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label for="customer">Cliente</label>
-                        <select id="customer">
-                            <option value="">Todos los clientes</option>
-                            <option value="1">Juan Pérez</option>
-                            <option value="2">María García</option>
-                            <option value="3">Carlos López</option>
+                            <option value="pendiente">Pendiente</option>
+                            <option value="confirmada">Confirmada</option>
+                            <option value="cancelada">Cancelada</option>
+                            <option value="resuelto">Resuelto</option>
                         </select>
                     </div>
                 </div>
                 <div class="filter-actions">
-                    <button class="btn btn-secondary">Limpiar</button>
-                    <button class="btn btn-primary" id="apply-filters">Aplicar Filtros</button>
+                    <button class="btn btn-primary" id="refresh-btn">Actualizar Lista</button>
                 </div>
             </div>
 
-            <!-- Sales Table -->
+            <!-- Citas Table -->
             <div class="sales-table-container">
                 <div class="table-header">
-                    <div class="table-title">Historial de Ventas</div>
-                    <div class="table-actions">
-                        <button class="btn btn-primary" id="export-btn">Exportar</button>
-                        <button class="btn btn-primary" id="refresh-btn">Actualizar</button>
-                    </div>
+                    <div class="table-title">Historial de Citas</div>
                 </div>
                 <table>
                     <thead>
                         <tr>
-                            <th>ID Venta</th>
+                            <th>ID</th>
                             <th>Fecha</th>
+                            <th>Hora</th>
                             <th>Cliente</th>
-                            <th>Productos</th>
-                            <th>Total</th>
+                            <th>Descripción</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody id="sales-table-body">
+                    <tbody id="citas-table-body">
                         <!-- Las filas se llenarán con JavaScript -->
+                        <tr>
+                            <td colspan="7" style="text-align: center;">Cargando citas...</td>
+                        </tr>
                     </tbody>
                 </table>
-                <div class="pagination">
-                    <div class="pagination-info">Mostrando 1-10 de 124 ventas</div>
-                    <div class="pagination-controls">
-                        <button class="pagination-btn">Anterior</button>
-                        <button class="pagination-btn active">1</button>
-                        <button class="pagination-btn">2</button>
-                        <button class="pagination-btn">3</button>
-                        <button class="pagination-btn">Siguiente</button>
-                    </div>
-                </div>
+            </div>
+
+            <div style="margin-top: 40px; text-align: center; padding-bottom: 20px;">
+                <a href="../index.html" class="btn-primary"
+                    style="text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; background-color: #3498db; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    🏠 Volver al Inicio
+                </a>
             </div>
         </div>
-    </div>  
+    </div>
 
-    <script src="app.js"></script>
+    <!-- Script específico para citas -->
+    <script src="../config.js"></script>
+    <script src="citas.js"></script>
 </body>
+
 </html>
