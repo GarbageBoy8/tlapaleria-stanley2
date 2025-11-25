@@ -50,7 +50,7 @@
         <!-- Botón de Admin (Oculto por defecto) -->
         <div id="admin-panel-btn-container" style="display: none; margin-bottom: 20px; text-align: center;">
             <a href="../admin_ventas/index.html"
-                style="background-color: #040F44; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; justify-content: center;" >
+                style="background-color: #040F44; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; justify-content: center;">
                 <i class="fa-solid fa-user-shield"></i> Panel de Administración
             </a>
         </div>
@@ -73,32 +73,18 @@
 
         <!-- Sección de Citas (oculta inicialmente) -->
         <section class="content-section" id="appointments-section">
-            <h2>Mis Citas Anteriores</h2>
-            <ul class="appointments-list">
-                <li>
-                    <span class="appointment-service">Corte de Cabello</span>
-                    <span class="appointment-date">Fecha: 15/11/2025</span>
-                    <span class="appointment-time">Hora: 14:30</span>
-                    <span class="appointment-status">Completada</span>
-                </li>
-                <li>
-                    <span class="appointment-service">Consulta Médica</span>
-                    <span class="appointment-date">Fecha: 08/11/2025</span>
-                    <span class="appointment-time">Hora: 10:00</span>
-                    <span class="appointment-status">Completada</span>
-                </li>
-                <li>
-                    <span class="appointment-service">Masaje Relajante</span>
-                    <span class="appointment-date">Fecha: 20/11/2025</span>
-                    <span class="appointment-time">Hora: 16:00</span>
-                    <span class="appointment-status">Programada</span>
-                </li>
+            <h2>Mis Citas Agendadas</h2>
+            <ul class="appointments-list" id="lista-citas">
+                <p>Cargando tus citas...</p>
             </ul>
         </section>
     </div>
 
-    <script src="app.js"></script>
-
+    <!-- Botones de Acción -->
+    <div class="btn-user">
+        <button><a href="../index.html"> Ir al Inicio</a></button>
+        <button id="btn-logout">Cerrar Sesión</button>
+    </div>
 
     <div id="modal-carrito" class="modal-overlay">
         <div class="modal-contenido">
@@ -109,15 +95,10 @@
     </div>
     <div id="toast-notificacion" class="toast"></div>
 
-
-    <!-- Botones de Acción -->
-    <div class="btn-user">
-        <button><a href="../index.html"> Ir al Inicio</a></button>
-        <button id="btn-logout">Cerrar Sesión</button>
-    </div>
-    <!-- Scripts del carrito -->
+    <!-- Scripts -->
     <script src="../config.js"></script>
     <script src="../carrito.js"></script>
+    <script src="app.js"></script>
 </body>
 
 </html>

@@ -82,10 +82,10 @@ function refreshData() {
 }
 
 // Inicializar la página
-document.addEventListener('DOMContentLoaded', function () {
-    // Cargar datos reales
-    cargarEstadisticas();
-    cargarHistorialVentas();
+document.addEventListener('DOMContentLoaded', async function () {
+    // Cargar datos reales secuencialmente para no saturar conexiones
+    await cargarEstadisticas();
+    await cargarHistorialVentas();
 
     // Asignar eventos a los botones
     const exportBtn = document.getElementById('export-btn');
@@ -118,10 +118,10 @@ async function cargarEstadisticas() {
                 totalUsuariosElement.textContent = data.total_usuarios || 0;
             }
         } else {
-            console.error('Error al cargar estadísticas');
+            console.error('Error al cargar estadísticas:', await response.text());
         }
     } catch (error) {
-        console.error('Error de conexión:', error);
+        console.error('Error de conexión (stats):', error);
     }
 }
 
@@ -149,11 +149,12 @@ async function cargarHistorialVentas() {
 
             renderSalesTable(salesData);
         } else {
-            console.error('Error al cargar historial de ventas');
-            tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: red;">Error al cargar datos</td></tr>';
+            const errorText = await response.text();
+            console.error('Error al cargar historial de ventas:', errorText);
+            tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: red;">Error: ${errorText}</td></tr>`;
         }
     } catch (error) {
-        console.error('Error de conexión:', error);
+        console.error('Error de conexión (ventas):', error);
         tableBody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: red;">Error de conexión</td></tr>';
     }
 }
