@@ -140,6 +140,46 @@
 		</div>
 	</section>
 
+	<script>
+		// Función para mostrar el toast
+		function showToast() {
+			const toast = document.getElementById('toast-notificacion');
+
+			// Configurar el contenido del toast
+			toast.innerHTML = `
+        <i class="fas fa-check-circle"></i>
+        <span class="toast-message">¡Información enviada! Nos pondremos en contacto con usted.</span>
+        <div class="toast-progress"></div>
+    `;
+
+			// Mostrar toast inmediatamente
+			toast.classList.add('show');
+
+			// Ocultar después de 3 segundos
+			setTimeout(() => {
+				toast.classList.remove('show');
+			}, 3000);
+		}
+
+		// Event Listener directo para el botón
+		document.addEventListener('DOMContentLoaded', function () {
+			const submitBtn = document.querySelector('.btn-submit');
+
+			if (submitBtn) {
+				submitBtn.addEventListener('click', function (e) {
+					// Prevenir el envío real del formulario (para demo)
+					e.preventDefault();
+
+					// Mostrar el toast inmediatamente al hacer clic
+					showToast();
+
+					// Aquí puedes agregar tu lógica de envío real después
+					console.log('Botón de enviar clickeado - Toast mostrado');
+				});
+			}
+		});
+	</script>
+
 	<!-- FOOTER -->
 	<footer class="footer">
 		<div class="footer-contenedor">
@@ -192,7 +232,8 @@
 				<div class="contacto-item">
 					<i>&#x27A6;</i>
 					<span>
-						Paseo de la noria cerrada de chapultepec #12, Colonia San Miguel Ixtapaluca,Estado de México, C.P. 56570
+						Paseo de la noria cerrada de chapultepec #12, Colonia San Miguel Ixtapaluca,Estado de México,
+						C.P. 56570
 					</span>
 				</div>
 
