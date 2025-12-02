@@ -87,7 +87,17 @@
 
         .header h1 {
             position: fixed;
-            color: var(--secondary-color);
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            /* o el color de tu fondo */
+            padding: 15px 20px;
+            margin: 0;
+            z-index: 1000;
+            /* Asegura que esté por encima */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
         }
 
         .user-info {
@@ -274,7 +284,8 @@
             border-collapse: collapse;
         }
 
-        th, td {
+        th,
+        td {
             padding: 15px;
             text-align: left;
             border-bottom: 1px solid #eee;
@@ -349,20 +360,20 @@
             .container {
                 flex-direction: column;
             }
-            
+
             .sidebar {
                 width: 100%;
                 height: auto;
             }
-            
+
             .dashboard-cards {
                 grid-template-columns: 1fr;
             }
-            
+
             .filter-row {
                 flex-direction: column;
             }
-            
+
             table {
                 display: block;
                 overflow-x: auto;
@@ -370,8 +381,8 @@
         }
 
 
-        .titulo{
+        .titulo {
             display: flex;
             justify-content: center;
-            
+
         }
