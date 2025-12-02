@@ -86,7 +86,7 @@
         }
 
         .header h1 {
-            position: absolute;
+            position: fixed;
             color: var(--secondary-color);
         }
 
