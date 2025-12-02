@@ -98,7 +98,7 @@
             /* Asegura que esté por encima */
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        }
+        
 
         .user-info {
             display: flex;
