@@ -85,12 +85,7 @@
             border-bottom: 1px solid #ddd;
         }
 
-        .header h1 {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 50%;
-        }
+       
 
         .user-info {
             display: flex;
