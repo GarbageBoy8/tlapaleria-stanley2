@@ -28,6 +28,8 @@
     border-radius: 8px;
     min-width: 350px; /* Ancho mínimo */
     max-width: 500px; /* Ancho máximo */
+    max-height: 80vh; /* Altura máxima del 80% de la pantalla */
+    overflow-y: auto; /* Scroll vertical cuando el contenido excede */
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     position: relative; /* Para posicionar el botón de cerrar */
 }
