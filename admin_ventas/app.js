@@ -1,10 +1,16 @@
 // URL Base de la API
 const API_BASE_URL = 'https://tlapaleria-backend.onrender.com';
 
+// Variable global para almacenar las ventas cargadas
+let ventasData = [];
+
 // Función para renderizar la tabla de ventas
 function renderSalesTable(salesData) {
     const tableBody = document.getElementById('sales-table-body');
     if (!tableBody) return; // Evitar errores si no existe la tabla en esta página
+
+    // Guardar datos en variable global para acceder desde viewSale
+    ventasData = salesData;
 
     tableBody.innerHTML = '';
 
@@ -61,9 +67,48 @@ function renderSalesTable(salesData) {
     });
 }
 
-// Funciones para las acciones de venta
+// Función para ver detalles de la venta
 function viewSale(saleId) {
-    alert(`Detalles de la venta #${saleId}`);
+    // Buscar la venta en los datos cargados
+    const venta = ventasData.find(v => v.id == saleId);
+
+    if (!venta) {
+        alert('No se encontraron los detalles de la venta.');
+        return;
+    }
+
+    // Formatear fecha
+    const fecha = new Date(venta.date).toLocaleDateString('es-MX', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+
+    // Determinar estado
+    let estadoTexto = 'Completado';
+    if (venta.status === 'pending') estadoTexto = 'Pendiente';
+    if (venta.status === 'cancelled') estadoTexto = 'Cancelado';
+
+    // Mostrar detalles completos
+    const mensaje = `
+═══════════════════════════════
+    DETALLES DE LA VENTA #${venta.id}
+═══════════════════════════════
+
+👤 Cliente: ${venta.customer}
+
+📅 Fecha: ${fecha}
+
+📦 Productos: ${venta.products}
+
+💰 Total: $${parseFloat(venta.total).toFixed(2)}
+
+📋 Estado: ${estadoTexto}
+═══════════════════════════════`;
+
+    alert(mensaje);
 }
 
 function editSale(saleId) {
