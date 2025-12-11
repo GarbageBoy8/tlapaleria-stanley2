@@ -3,22 +3,23 @@
 /* El fondo oscuro (overlay) */
 .modal-overlay {
     /* Oculto por defecto */
-    display: none; 
-    
+    display: none;
+
     /* Abarca toda la pantalla */
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Fondo negro semi-transparente */
-    
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Fondo negro semi-transparente */
+
     /* Para centrar la ventana */
     justify-content: center;
     align-items: center;
-    
+
     /* Asegura que esté por encima de todo */
-    z-index: 1000; 
+    z-index: 1000;
 }
 
 /* La ventana blanca del centro */
@@ -26,12 +27,17 @@
     background-color: #fff;
     padding: 20px 30px;
     border-radius: 8px;
-    min-width: 350px; /* Ancho mínimo */
-    max-width: 500px; /* Ancho máximo */
-    max-height: 80vh; /* Altura máxima del 80% de la pantalla */
-    overflow-y: auto; /* Scroll vertical cuando el contenido excede */
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    position: relative; /* Para posicionar el botón de cerrar */
+    min-width: 350px;
+    /* Ancho mínimo */
+    max-width: 500px;
+    /* Ancho máximo */
+    max-height: 80dvh;
+    /* Altura máxima del 80% de la pantalla */
+    overflow-y: auto;
+    /* Scroll vertical cuando el contenido excede */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    /* Para posicionar el botón de cerrar */
 }
 
 /* El botón de cerrar (la 'x') */
@@ -57,16 +63,19 @@
     border-bottom: 1px solid #eee;
     padding-bottom: 10px;
 }
+
 .producto-en-carrito img {
     border-radius: 4px;
     margin-right: 10px;
 }
+
 .total-carrito {
     font-weight: bold;
     font-size: 1.2em;
     text-align: right;
     margin-top: 15px;
 }
+
 #btn-limpiar-carrito {
     background-color: #d9534f;
     color: white;
@@ -75,12 +84,15 @@
     border-radius: 5px;
     cursor: pointer;
     margin-top: 15px;
-    display: block; /* Ocupa todo el ancho */
+    display: block;
+    /* Ocupa todo el ancho */
     width: 100%;
 }
+
 #btn-limpiar-carrito:hover {
     background-color: #c9302c;
 }
+
 /* --- Estilos para la Notificación Toast --- */
 
 .toast {
@@ -90,8 +102,9 @@
 
     /* --- Posición fija (flotante) --- */
     position: fixed;
-    z-index: 2000; /* Debe estar sobre todo, incluso la modal */
-    
+    z-index: 2000;
+    /* Debe estar sobre todo, incluso la modal */
+
     /* --- Centrado en la parte inferior --- */
     left: 50%;
     transform: translateX(-50%);
@@ -99,7 +112,8 @@
 
     /* --- Estilos visuales --- */
     min-width: 250px;
-    background-color: #28a745; /* Verde de éxito */
+    background-color: #28a745;
+    /* Verde de éxito */
     color: white;
     text-align: center;
     border-radius: 8px;
