@@ -93,9 +93,9 @@ function viewSale(saleId) {
 
     // Mostrar detalles completos
     const mensaje = `
-═══════════════════════════════
+    ═══════════════════════════════
     DETALLES DE LA VENTA #${venta.id}
-═══════════════════════════════
+
 
 👤 Cliente: ${venta.customer}
 
