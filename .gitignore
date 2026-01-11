@@ -1,4 +1,4 @@
 node_modules
 .env
 .gitignore
-admin_kill_connections.php
+#Hola 
