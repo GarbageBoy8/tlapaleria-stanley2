@@ -417,7 +417,15 @@ app.post('/api/comprar', (req, res) => {
         VALUES ?
       `, [detallesValues]);
 
-      // 6. Vaciar carrito
+      // 6. Reducir stock de cada producto
+      for (const item of items) {
+        await connection.promise().query(
+          'UPDATE productos SET stock = stock - ? WHERE id_producto = ?',
+          [item.cantidad, item.id_producto]
+        );
+      }
+
+      // 7. Vaciar carrito
       await connection.promise().query('DELETE FROM carrito WHERE id_usuario = ?', [id_usuario]);
 
       // 7. Confirmar transacción
