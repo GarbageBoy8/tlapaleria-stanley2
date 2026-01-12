@@ -829,32 +829,6 @@
 	<script src="../config.js"></script>
 	<script src="../carrito.js"></script>
 
-	<!-- Rebaja automática: muestra precio original tachado y precio rebajado -->
-	<script>
-		document.addEventListener('DOMContentLoaded', () => {
-			const descuento = 0.20; // 20% de descuento
-
-			document.querySelectorAll('.card-producto .precio').forEach((precioEl) => {
-				if (precioEl.dataset.precioProcesado === '1' || precioEl.querySelector('.precio-old')) return;
-
-				const texto = precioEl.textContent.trim();
-				const match = texto.match(/[\d.,]+/);
-				if (!match) return;
-
-				const numero = parseFloat(match[0].replace(/[^0-9.]/g, ''));
-				if (Number.isNaN(numero)) return;
-
-				const precioRebajado = (numero * (1 - descuento)).toFixed(2);
-
-				precioEl.dataset.precioProcesado = '1';
-				precioEl.innerHTML = `
-					<span class="precio-old">${texto}</span>
-					<span class="precio-new">$${precioRebajado}</span>
-				`;
-			});
-		});
-	</script>
-
 </body>
 
 </html>
