@@ -32,7 +32,7 @@
                 <li><a href="index.html"><i></i>Panel Principal</a></li>
                 <li><a href="ventas.html"><i></i>Ventas</a></li>
                 <li><a href="citas.html"><i></i>Citas</a></li>
-                <li><a href="inventario.html" class="active"><i></i>📦 Inventario</a></li>
+                <li><a href="inventario.html" class="active"><i></i>Inventario</a></li>
             </ul>
         </div>
 
@@ -91,29 +91,35 @@
 
     <!-- Modal Agregar/Editar Producto -->
     <div id="modal-producto" class="modal-overlay" style="display: none;">
-        <div class="modal-contenido" style="background: white; padding: 30px; border-radius: 10px; max-width: 500px; width: 90%;">
-            <span class="modal-cerrar" onclick="cerrarModal()" style="float: right; cursor: pointer; font-size: 24px;">&times;</span>
+        <div class="modal-contenido"
+            style="background: white; padding: 30px; border-radius: 10px; max-width: 500px; width: 90%;">
+            <span class="modal-cerrar" onclick="cerrarModal()"
+                style="float: right; cursor: pointer; font-size: 24px;">&times;</span>
             <h2 id="modal-titulo">Agregar Producto</h2>
             <form id="form-producto" onsubmit="guardarProducto(event)">
                 <input type="hidden" id="producto-id">
                 <div style="margin-bottom: 15px;">
-                    <label for="producto-nombre" style="display: block; margin-bottom: 5px; font-weight: bold;">Nombre:</label>
-                    <input type="text" id="producto-nombre" required 
+                    <label for="producto-nombre"
+                        style="display: block; margin-bottom: 5px; font-weight: bold;">Nombre:</label>
+                    <input type="text" id="producto-nombre" required
                         style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
                 </div>
                 <div style="margin-bottom: 15px;">
-                    <label for="producto-precio" style="display: block; margin-bottom: 5px; font-weight: bold;">Precio:</label>
-                    <input type="number" id="producto-precio" step="0.01" min="0" required 
+                    <label for="producto-precio"
+                        style="display: block; margin-bottom: 5px; font-weight: bold;">Precio:</label>
+                    <input type="number" id="producto-precio" step="0.01" min="0" required
                         style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
                 </div>
                 <div style="margin-bottom: 15px;">
-                    <label for="producto-stock" style="display: block; margin-bottom: 5px; font-weight: bold;">Stock:</label>
-                    <input type="number" id="producto-stock" min="0" required 
+                    <label for="producto-stock"
+                        style="display: block; margin-bottom: 5px; font-weight: bold;">Stock:</label>
+                    <input type="number" id="producto-stock" min="0" required
                         style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
                 </div>
                 <div style="margin-bottom: 15px;">
-                    <label for="producto-descripcion" style="display: block; margin-bottom: 5px; font-weight: bold;">Descripción:</label>
-                    <textarea id="producto-descripcion" rows="3" 
+                    <label for="producto-descripcion"
+                        style="display: block; margin-bottom: 5px; font-weight: bold;">Descripción:</label>
+                    <textarea id="producto-descripcion" rows="3"
                         style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;"></textarea>
                 </div>
                 <div style="display: flex; gap: 10px; justify-content: flex-end;">
