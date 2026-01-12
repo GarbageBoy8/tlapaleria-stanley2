@@ -481,10 +481,26 @@ h2 {
 }
 
 .precio {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.4rem;
 	font-size: 2rem;
 	font-weight: 600;
 	color: var(--primary-color);
 	margin-bottom: 1.5rem;
+}
+
+.precio-old {
+	font-size: 1.4rem;
+	color: #999;
+	text-decoration: line-through;
+}
+
+.precio-new {
+	font-size: 2rem;
+	font-weight: 700;
+	color: var(--primary-color);
 }
 
 .btn-agregar-carrito {
