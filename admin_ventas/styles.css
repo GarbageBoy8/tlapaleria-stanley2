@@ -85,7 +85,7 @@
             border-bottom: 1px solid #ddd;
         }
 
-       
+
 
         .user-info {
             display: flex;
@@ -372,4 +372,75 @@
             display: flex;
             justify-content: center;
 
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-contenido {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-cerrar {
+            float: right;
+            cursor: pointer;
+            font-size: 28px;
+            color: #666;
+            transition: color 0.3s;
+        }
+
+        .modal-cerrar:hover {
+            color: #e74c3c;
+        }
+
+        /* Page Title */
+        .page-title {
+            font-size: 24px;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        /* Inventory Stock Colors */
+        .stock-low {
+            color: var(--danger-color);
+            font-weight: bold;
+        }
+
+        .stock-warning {
+            color: var(--warning-color);
+            font-weight: bold;
+        }
+
+        .stock-ok {
+            color: var(--success-color);
+            font-weight: bold;
         }

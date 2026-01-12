@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario - Panel de Administración</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <script>
+        // 🔒 PROTECCIÓN DE RUTA: Solo administradores
+        const usuarioGuardado = localStorage.getItem('usuario');
+        if (!usuarioGuardado) {
+            window.location.href = '../Inicio de Sesion/index.html';
+        } else {
+            const usuario = JSON.parse(usuarioGuardado);
+            if (usuario.rol !== 'admin') {
+                alert('⛔ Acceso denegado. Solo administradores.');
+                window.location.href = '../index.html';
+            }
+        }
+    </script>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Panel Admin</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="index.html"><i></i>Panel Principal</a></li>
+                <li><a href="ventas.html"><i></i>Ventas</a></li>
+                <li><a href="citas.html"><i></i>Citas</a></li>
+                <li><a href="inventario.html" class="active"><i></i>📦 Inventario</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1 class="page-title">📦 Gestión de Inventario</h1>
+                <div class="user-info">
+                    <img src="../img/users-svgrepo-com.svg" alt="Usuario">
+                    <span>Administrador</span>
+                </div>
+            </div>
+
+            <!-- Botón Agregar Producto -->
+            <div style="margin-bottom: 20px;">
+                <button class="btn btn-primary" onclick="abrirModalAgregar()">
+                    ➕ Agregar Producto
+                </button>
+            </div>
+
+            <!-- Tabla de Productos -->
+            <div class="sales-table-container">
+                <div class="table-header">
+                    <h3 class="table-title">Lista de Productos</h3>
+                    <div class="table-actions">
+                        <button class="btn btn-secondary" onclick="cargarProductos()">🔄 Actualizar</button>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Descripción</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productos-table-body">
+                        <tr>
+                            <td colspan="6" style="text-align:center;">Cargando productos...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: 40px; text-align: center; padding-bottom: 20px;">
+                <a href="../index.html" class="btn-primary"
+                    style="text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; background-color: #3498db; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    🏠 Volver al Inicio
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Agregar/Editar Producto -->
+    <div id="modal-producto" class="modal-overlay" style="display: none;">
+        <div class="modal-contenido" style="background: white; padding: 30px; border-radius: 10px; max-width: 500px; width: 90%;">
+            <span class="modal-cerrar" onclick="cerrarModal()" style="float: right; cursor: pointer; font-size: 24px;">&times;</span>
+            <h2 id="modal-titulo">Agregar Producto</h2>
+            <form id="form-producto" onsubmit="guardarProducto(event)">
+                <input type="hidden" id="producto-id">
+                <div style="margin-bottom: 15px;">
+                    <label for="producto-nombre" style="display: block; margin-bottom: 5px; font-weight: bold;">Nombre:</label>
+                    <input type="text" id="producto-nombre" required 
+                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label for="producto-precio" style="display: block; margin-bottom: 5px; font-weight: bold;">Precio:</label>
+                    <input type="number" id="producto-precio" step="0.01" min="0" required 
+                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label for="producto-stock" style="display: block; margin-bottom: 5px; font-weight: bold;">Stock:</label>
+                    <input type="number" id="producto-stock" min="0" required 
+                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label for="producto-descripcion" style="display: block; margin-bottom: 5px; font-weight: bold;">Descripción:</label>
+                    <textarea id="producto-descripcion" rows="3" 
+                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;"></textarea>
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">💾 Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="inventario.js"></script>
+</body>
+
+</html>

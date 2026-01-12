@@ -772,6 +772,126 @@ app.put('/api/admin/citas/:id/estado', (req, res) => {
   });
 });
 
+// ================================================================
+// 📦 RUTAS DE INVENTARIO (ADMIN)
+// ================================================================
+
+/**
+ * 15. OBTENER TODOS LOS PRODUCTOS CON STOCK (GET /api/admin/productos)
+ */
+app.get('/api/admin/productos', (req, res) => {
+  const sql = 'SELECT id_producto, nombre, precio, descripcion, stock FROM productos ORDER BY id_producto DESC';
+
+  db.getConnection((err, connection) => {
+    if (err) {
+      console.error('❌ Error de conexión:', err);
+      return res.status(500).json({ error: 'Error de conexión' });
+    }
+
+    connection.query(sql, (err, results) => {
+      connection.release();
+      if (err) {
+        console.error('❌ Error al obtener productos:', err);
+        return res.status(500).json({ error: 'Error al obtener productos' });
+      }
+      res.json(results);
+    });
+  });
+});
+
+/**
+ * 16. AGREGAR NUEVO PRODUCTO (POST /api/admin/productos)
+ */
+app.post('/api/admin/productos', (req, res) => {
+  const { nombre, precio, descripcion, stock } = req.body;
+
+  if (!nombre || precio === undefined) {
+    return res.status(400).json({ error: 'Nombre y precio son obligatorios' });
+  }
+
+  const sql = 'INSERT INTO productos (nombre, precio, descripcion, stock) VALUES (?, ?, ?, ?)';
+
+  db.getConnection((err, connection) => {
+    if (err) {
+      console.error('❌ Error de conexión:', err);
+      return res.status(500).json({ error: 'Error de conexión' });
+    }
+
+    connection.query(sql, [nombre, precio, descripcion || '', stock || 0], (err, result) => {
+      connection.release();
+      if (err) {
+        console.error('❌ Error al agregar producto:', err);
+        return res.status(500).json({ error: 'Error al agregar producto' });
+      }
+      res.status(201).json({
+        message: 'Producto agregado exitosamente',
+        id_producto: result.insertId
+      });
+    });
+  });
+});
+
+/**
+ * 17. EDITAR PRODUCTO (PUT /api/admin/productos/:id)
+ */
+app.put('/api/admin/productos/:id', (req, res) => {
+  const { id } = req.params;
+  const { nombre, precio, descripcion, stock } = req.body;
+
+  if (!nombre || precio === undefined) {
+    return res.status(400).json({ error: 'Nombre y precio son obligatorios' });
+  }
+
+  const sql = 'UPDATE productos SET nombre = ?, precio = ?, descripcion = ?, stock = ? WHERE id_producto = ?';
+
+  db.getConnection((err, connection) => {
+    if (err) {
+      console.error('❌ Error de conexión:', err);
+      return res.status(500).json({ error: 'Error de conexión' });
+    }
+
+    connection.query(sql, [nombre, precio, descripcion || '', stock || 0, id], (err, result) => {
+      connection.release();
+      if (err) {
+        console.error('❌ Error al actualizar producto:', err);
+        return res.status(500).json({ error: 'Error al actualizar producto' });
+      }
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Producto no encontrado' });
+      }
+      res.json({ message: 'Producto actualizado exitosamente' });
+    });
+  });
+});
+
+/**
+ * 18. ELIMINAR PRODUCTO (DELETE /api/admin/productos/:id)
+ */
+app.delete('/api/admin/productos/:id', (req, res) => {
+  const { id } = req.params;
+
+  const sql = 'DELETE FROM productos WHERE id_producto = ?';
+
+  db.getConnection((err, connection) => {
+    if (err) {
+      console.error('❌ Error de conexión:', err);
+      return res.status(500).json({ error: 'Error de conexión' });
+    }
+
+    connection.query(sql, [id], (err, result) => {
+      connection.release();
+      if (err) {
+        console.error('❌ Error al eliminar producto:', err);
+        return res.status(500).json({ error: 'Error al eliminar producto' });
+      }
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Producto no encontrado' });
+      }
+      res.json({ message: 'Producto eliminado exitosamente' });
+    });
+  });
+});
+
 // 🌐 Ruta raíz para verificar el estado del servidor
 app.get('/', (req, res) => {
   res.send('Servidor backend conectado a Clever Cloud 🚀');
