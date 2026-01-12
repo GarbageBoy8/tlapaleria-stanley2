@@ -69,11 +69,19 @@
     margin-right: 10px;
 }
 
+.info-producto-carrito {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
 .total-carrito {
     font-weight: bold;
     font-size: 1.2em;
     text-align: right;
     margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px solid #eee;
 }
 
 #btn-limpiar-carrito {

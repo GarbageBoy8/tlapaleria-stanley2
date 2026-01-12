@@ -217,7 +217,12 @@ document.addEventListener('DOMContentLoaded', () => {
         contenedorItems.innerHTML = '';
 
         let totalAcumulado = 0;
+        let totalAcumuladoConDescuento = 0;
         let totalItems = 0;
+
+        // Detectar si estamos en la página de ofertas
+        const esPaginaOfertas = window.location.pathname.includes('ofertas');
+        const descuento = esPaginaOfertas ? 0.20 : 0; // 20% de descuento en ofertas
 
         // Si el carrito está vacío
         if (!carrito || carrito.length === 0) {
@@ -230,17 +235,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Si hay productos, los recorremos
         carrito.forEach(prod => {
-            const subtotal = parseFloat(prod.precio) * prod.cantidad;
+            const precioOriginal = parseFloat(prod.precio);
+            const precioConDescuento = esPaginaOfertas ? precioOriginal * (1 - descuento) : precioOriginal;
+            const subtotal = precioOriginal * prod.cantidad;
+            const subtotalConDescuento = precioConDescuento * prod.cantidad;
+            
             totalAcumulado += subtotal;
+            totalAcumuladoConDescuento += subtotalConDescuento;
             totalItems += prod.cantidad;
 
             const productoDiv = document.createElement('div');
             productoDiv.classList.add('producto-en-carrito');
+            
+            // HTML para mostrar precio con o sin descuento
+            let precioHTML = '';
+            if (esPaginaOfertas) {
+                precioHTML = `
+                    <p style="display: flex; flex-direction: column; gap: 2px; align-items: flex-start;">
+                        <span style="font-size: 0.85em; color: #999; text-decoration: line-through;">$${precioOriginal.toFixed(2)} x ${prod.cantidad}</span>
+                        <span style="font-weight: 600; color: var(--primary-color, #06196F);">$${precioConDescuento.toFixed(2)} x ${prod.cantidad}</span>
+                    </p>
+                    <p style="color: #666; font-size: 0.9em;">
+                        <span style="text-decoration: line-through; color: #999;">Subtotal: $${subtotal.toFixed(2)}</span><br>
+                        <span style="font-weight: 600; color: #28a745;">Subtotal con descuento: $${subtotalConDescuento.toFixed(2)}</span>
+                    </p>
+                `;
+            } else {
+                precioHTML = `
+                    <p>$${precioOriginal.toFixed(2)} x ${prod.cantidad}</p>
+                    <p style="color: #666; font-size: 0.9em;">Subtotal: $${subtotal.toFixed(2)}</p>
+                `;
+            }
+
             productoDiv.innerHTML = `
                 <div class="info-producto-carrito" style="flex: 1;">
                     <p><strong>${prod.nombre}</strong></p>
-                    <p>$${parseFloat(prod.precio).toFixed(2)} x ${prod.cantidad}</p>
-                    <p style="color: #666; font-size: 0.9em;">Subtotal: $${subtotal.toFixed(2)}</p>
+                    ${precioHTML}
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 5px; align-items: center;">
                     <button class="btn-cantidad" data-id="${prod.id_producto}" data-accion="aumentar" style="width: 30px; height: 30px; border: 1px solid #ddd; background: #f0f0f0; cursor: pointer;">+</button>
@@ -292,7 +322,20 @@ document.addEventListener('DOMContentLoaded', () => {
         // Añadir el total
         const totalDiv = document.createElement('div');
         totalDiv.classList.add('total-carrito');
-        totalDiv.innerHTML = `<h3>Total: $${totalAcumulado.toFixed(2)}</h3>`;
+        
+        if (esPaginaOfertas) {
+            const ahorro = totalAcumulado - totalAcumuladoConDescuento;
+            totalDiv.innerHTML = `
+                <div style="text-align: right;">
+                    <p style="color: #999; text-decoration: line-through; margin: 5px 0; font-size: 0.9em;">Total original: $${totalAcumulado.toFixed(2)}</p>
+                    <h3 style="color: #28a745; margin: 5px 0;">Total con descuento: $${totalAcumuladoConDescuento.toFixed(2)}</h3>
+                    <p style="color: #666; font-size: 0.85em; margin: 5px 0;">Ahorras: $${ahorro.toFixed(2)}</p>
+                </div>
+            `;
+        } else {
+            totalDiv.innerHTML = `<h3>Total: $${totalAcumulado.toFixed(2)}</h3>`;
+        }
+        
         contenedorItems.appendChild(totalDiv);
 
         // Añadir botón de "Vaciar Carrito"
